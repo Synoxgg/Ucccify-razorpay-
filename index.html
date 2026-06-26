@@ -1,0 +1,2392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
+  <title>UCify - BGMI UC Store</title>
+  <meta name="title" content="UCify - BGMI UC Store | Fast & Secure UC Delivery">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #FFB800; /* UC Gold */
+      --primary-glow: rgba(255, 184, 0, 0.6);
+      --accent: #00E0FF; /* Tech Cyan */
+      --bg-dark: #050507;
+      --bg-panel: #0e0e12;
+      --surface: rgba(255, 255, 255, 0.05);
+      --surface-border: rgba(255, 255, 255, 0.12);
+      --text-main: #ffffff;
+      --text-muted: #9ca3af;
+      --success: #00ff9d;
+      --error: #ff4757;
+      
+      --font-display: 'Rajdhani', sans-serif;
+      --font-body: 'Outfit', sans-serif;
+      
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 8px;
+    }
+
+    /* --- BASE RESET & ANIMATION --- */
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      -webkit-tap-highlight-color: transparent; 
+      /* Prevent Text Selection */
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    
+    /* Allow Text Selection only in Input Fields */
+    input, textarea, select {
+      -webkit-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
+    }
+
+    /* Prevent Image Dragging & Long Press Callout */
+    img {
+      -webkit-user-drag: none;
+      user-drag: none;
+      -webkit-touch-callout: none;
+      pointer-events: none; /* Stops image specific right-clicks, let parent handle clicks */
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 0% 0%, rgba(255, 184, 0, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(0, 224, 255, 0.08) 0%, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    body.modal-open {
+        overflow: hidden;
+    }
+
+    /* --- INITIAL FULL SCREEN LOADER --- */
+    #initial-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 999999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    .loader-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 184, 0, 0.2);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    .loader-text {
+      margin-top: 20px;
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 2px;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    /* --- LAYOUT CONTAINER --- */
+    .container {
+      width: 100%;
+      max-width: 480px;
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+      flex: 1;
+    }
+
+    /* --- HEADER CARD --- */
+    .top-card {
+      background: rgba(14, 14, 18, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-lg);
+      padding: 30px 20px;
+      text-align: center;
+      margin-bottom: 25px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 40px -10px rgba(0,0,0,0.8);
+    }
+
+    /* Enhanced Glow */
+    .top-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255,184,0,0.2), transparent 70%);
+      pointer-events: none;
+      filter: blur(40px);
+    }
+
+    .logo-img {
+      max-width: 160px;
+      height: auto;
+      filter: drop-shadow(0 0 15px rgba(255,184,0,0.4));
+      margin-bottom: 5px;
+    }
+
+    .tagline {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: 5px;
+      letter-spacing: 0.5px;
+    }
+
+    /* --- TRUST BADGES & LOGO --- */
+    .partner-block { margin-top: 15px; transition: all 0.3s ease; }
+    
+    .official-logo {
+      display: block;
+      margin: 15px auto 0;
+      max-width: 140px; 
+      height: auto;
+      border-radius: 6px;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+    }
+
+    .trust-strip {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .trust-pill {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--surface);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--surface-border);
+    }
+
+    .live-stats {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-badge {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      background: rgba(0, 224, 255, 0.05);
+      border: 1px solid rgba(0, 224, 255, 0.2);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+    }
+    .stat-number { color: var(--accent); font-weight: 800; font-family: var(--font-display); }
+
+    /* --- PROGRESS BAR --- */
+    .progress-wrap { margin-bottom: 25px; padding: 0 10px; }
+    .progress-container {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+    .progress-container::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0;
+      width: 100%; height: 2px;
+      background: #333;
+      transform: translateY(-50%);
+      z-index: 0;
+    }
+
+    .progress-step {
+      width: 32px; height: 32px;
+      background: var(--bg-panel);
+      border: 2px solid #333;
+      border-radius: 50%;
+      display: flex;
+      align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      color: #666;
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s ease;
+    }
+
+    .progress-step.active {
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 10px rgba(255,184,0,0.3);
+      background: var(--bg-dark);
+      transform: scale(1.1);
+    }
+
+    .progress-step.completed {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #000;
+    }
+    
+    .progress-line { display: none; } 
+
+    /* --- STEP CONTENT --- */
+    .step { display: none; animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    .step.active { display: block; }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-content {
+      background: var(--bg-panel);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .step-content::before {
+        content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+        background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        opacity: 0.5;
+    }
+
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 26px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      color: #fff; 
+      background: linear-gradient(to right, #fff, #b0b0b0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .subnote {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    /* --- INPUT FIELDS --- */
+    .form-group { margin-bottom: 20px; position: relative; }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    
+    .form-input-wrapper { position: relative; }
+    
+    .form-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.07); 
+      border: 1px solid var(--surface-border);
+      color: #fff;
+      padding: 16px;
+      padding-right: 40px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-display);
+      font-size: 18px;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .form-input::placeholder { color: rgba(255,255,255,0.2); }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 15px rgba(255,184,0,0.1);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .input-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--success);
+      font-size: 18px;
+      opacity: 0;
+      transition: 0.3s;
+    }
+    .input-icon.check { opacity: 1; }
+    
+    .error-message {
+      color: var(--error);
+      font-size: 12px;
+      margin-top: 6px;
+      display: none;
+    }
+    .error-message.show { display: block; animation: shake 0.4s ease; }
+
+    /* --- UC PACKS GRID --- */
+    .pack-section-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .pack-section-title:first-of-type { margin-top: 5px; }
+
+    .packs-grid {
+      display: grid;
+      grid-template-columns: 1fr; 
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .pack-card {
+      background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.4) 100%);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .pack-card:hover:not(.purchased) {
+      transform: translateY(-3px);
+      border-color: rgba(255,184,0,0.4);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    .pack-card.selected {
+      background: rgba(255, 184, 0, 0.1);
+      border: 1px solid var(--primary);
+      box-shadow: 0 0 20px rgba(255,184,0,0.15);
+    }
+    
+    .pack-card.purchased { display: none !important; }
+
+    .pack-uc {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+    }
+    
+    .uc-icon { width: 22px; height: 22px; }
+
+    .pack-price {
+      color: var(--text-muted);
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .pack-card.selected .pack-price { color: var(--primary); }
+    
+    .check-mark {
+      position: absolute;
+      top: 0; right: 0;
+      background: var(--primary);
+      color: #000;
+      width: 24px; height: 24px;
+      border-bottom-left-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    /* --- BUTTONS --- */
+    .btn-row { display: flex; gap: 10px; margin-top: 20px; }
+    
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 16px;
+      text-transform: uppercase;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #000;
+      box-shadow: 0 4px 15px rgba(255,184,0,0.3);
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      background: #ffc42e;
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(255,184,0,0.6);
+    }
+    
+    .btn-primary:disabled {
+      background: #333;
+      color: #666;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--surface-border);
+      color: var(--text-muted);
+    }
+    .btn-secondary:hover {
+      border-color: #fff;
+      color: #fff;
+    }
+
+    /* --- PAYMENT SECTION (STEP 3) --- */
+    .payment-section { text-align: center; }
+    
+    .qr-card {
+      background: #000;
+      padding: 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--surface-border);
+      margin: 15px 0;
+    }
+    
+    .qr-box {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    
+    .qr-skeleton {
+      width: 100%; height: 100%;
+      background: #222;
+      animation: pulse 1.5s infinite;
+    }
+
+    .qr-timer {
+      color: var(--error);
+      font-family: var(--font-display);
+      font-weight: 600;
+      margin: 10px 0;
+    }
+
+    /* Verification Box Styles */
+    .auto-verify-box {
+      margin-top: 20px; 
+      padding: 15px; 
+      background: rgba(0, 224, 255, 0.05); 
+      border: 1px solid rgba(0, 224, 255, 0.2); 
+      border-radius: var(--radius-md); 
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    /* Maintenance Box */
+    .maintenance-box {
+      margin-top: 20px; 
+      padding: 20px; 
+      background: rgba(255, 71, 87, 0.1); 
+      border: 1px solid var(--error); 
+      border-radius: var(--radius-md); 
+      text-align: center;
+      display: none; /* Hidden by default */
+    }
+
+    /* Smart Lock / Queue UI */
+    .lock-ui-box {
+      margin-top: 20px; 
+      padding: 20px; 
+      background: rgba(255, 184, 0, 0.05); 
+      border: 1px solid var(--primary); 
+      border-radius: var(--radius-md); 
+      text-align: center;
+      display: none; 
+    }
+    .lock-timer-text {
+      font-size: 24px; color: var(--primary); font-family: var(--font-display); font-weight: bold; margin: 10px 0; letter-spacing: 2px;
+    }
+
+    /* --- SUCCESS (STEP 4) --- */
+    .success-screen { text-align: center; }
+    .success-icon { 
+      font-size: 60px; 
+      color: var(--success); 
+      margin-bottom: 20px;
+      text-shadow: 0 0 30px rgba(0,255,157,0.5);
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn { 0%{transform: scale(0);} 100%{transform: scale(1);} }
+    
+    .success-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    /* Game Loader Bar */
+    .game-loader-wrap { margin: 30px 0; }
+    .game-bar-bg {
+      height: 8px;
+      background: #222;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+    }
+    .game-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #ff6b00);
+      width: 0%;
+      box-shadow: 0 0 15px rgba(255,184,0,0.6);
+      border-radius: 5px;
+      transition: width 1s linear;
+    }
+    .timer-text { font-family: monospace; color: var(--primary); font-size: 16px; }
+    
+    .receipt-box {
+      background: #000;
+      border: 1px solid #333;
+      padding: 20px;
+      border-radius: var(--radius-md);
+      text-align: left;
+      margin-top: 20px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      border-bottom: 1px dashed #333;
+      padding-bottom: 8px;
+    }
+    .receipt-label { color: #666; }
+    .receipt-value { color: #fff; font-weight: 600; }
+
+    /* --- FOOTER & MODALS --- */
+    .site-footer {
+        width: 100%;
+        max-width: 480px;
+        text-align: center;
+        padding: 10px 20px 40px 20px;
+        position: relative;
+        z-index: 2;
+    }
+    .footer-managed { color: var(--text-muted); font-size: 13px; margin-bottom: 15px; transition: all 0.3s ease; }
+    .footer-managed strong { color: #fff; }
+    .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px 20px;
+    }
+    .footer-links a {
+        color: var(--primary);
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .footer-links a:hover { color: #fff; }
+
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center;
+        z-index: 9999; padding: 20px; opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active { display: flex; opacity: 1; }
+    .modal-box {
+        background: #0a0a0c; border: 1px solid var(--surface-border); border-radius: var(--radius-md);
+        width: 100%; max-width: 400px; max-height: 85vh; overflow-y: auto; padding: 0;
+        transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.8);
+    }
+    .modal-overlay.active .modal-box { transform: translateY(0); }
+    .modal-header {
+        display: flex; justify-content: space-between; align-items: center; padding: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.05); position: sticky; top: 0;
+        background: rgba(10,10,12,0.95); backdrop-filter: blur(10px); z-index: 2;
+    }
+    .modal-header h3 { color: var(--primary); font-family: var(--font-display); font-size: 20px; margin: 0; }
+    .close-btn { background: none; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; transition: 0.2s; padding: 5px; }
+    .close-btn:hover { color: #fff; }
+    .modal-body { padding: 20px; color: #eee; font-size: 13px; line-height: 1.6; }
+    .modal-body h4 { color: #fff; margin-top: 20px; margin-bottom: 8px; font-size: 15px; }
+    .modal-body h4:first-child { margin-top: 0; }
+    .modal-body p { color: #ccc; margin-bottom: 10px; }
+    .modal-body ul { padding-left: 20px; color: #ccc; }
+    .modal-body ul li { margin-bottom: 5px; }
+
+
+    /* --- TOAST & SOCIAL PROOF --- */
+    .toast {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+      background: #1a1a1a; border: 1px solid var(--success); padding: 12px 24px;
+      border-radius: 50px; display: flex; align-items: center; gap: 10px; z-index: 100;
+      transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast i { color: var(--success); }
+
+    .social-proof {
+      position: fixed; bottom: 20px; left: 20px; background: rgba(10,10,10,0.9);
+      backdrop-filter: blur(10px); border: 1px solid var(--surface-border); padding: 10px 15px;
+      border-radius: 50px; display: none; align-items: center; gap: 10px; z-index: 99;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5); animation: slideInLeft 0.5s ease;
+    }
+    @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    
+    .social-proof-avatar {
+      width: 30px; height: 30px; background: var(--primary); border-radius: 50%;
+      color: #000; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px;
+    }
+    .social-proof-text { font-size: 12px; color: #ccc; }
+    .social-proof-uc { color: var(--primary); font-weight: 700; }
+
+    /* Particles CSS */
+    .floating-particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .particle {
+      position: absolute; color: var(--primary); opacity: 0.1; font-size: 10px;
+      animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.2; }
+      80% { opacity: 0.2; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    .night-msg {
+       display: none; background: rgba(255, 184, 0, 0.05); border: 1px solid #996e00;
+       color: var(--primary); padding: 15px; border-radius: var(--radius-md);
+       font-size: 13px; margin-top: 15px;
+    }
+
+    .final-success-msg { display: none; color: var(--success); margin-top: 10px; font-weight: 600; }
+    
+    .high-value-warning {
+      background: rgba(255, 71, 87, 0.1); border: 1px solid var(--error); color: #fff;
+      font-size: 11px; padding: 10px; border-radius: 8px; margin-top: 10px;
+      display: none; text-align: left;
+    }
+
+    /* Admin specific CSS additions */
+    #newPackType option, #adminPaymentMode option { background-color: var(--bg-dark); color: #fff; }
+    .admin-input-group { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; background: rgba(255,255,255,0.05); padding: 10px; border-radius: var(--radius-sm); }
+    .admin-section-title { margin-top: 25px; margin-bottom: 12px; font-size: 15px; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
+    .admin-subsection { margin-bottom: 15px; border-left: 2px solid var(--surface-border); padding-left: 10px; }
+    .flex-row-center { display: flex; align-items: center; gap: 8px; width: 100%; margin-bottom: 5px;}
+    .admin-toggle-box { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; flex-shrink: 0; }
+  </style>
+</head>
+
+<body oncontextmenu="return false;">
+
+  <!-- INITIAL FULL SCREEN LOADER -->
+  <div id="initial-loader">
+    <div class="loader-spinner"></div>
+    <div class="loader-text">UCIFY</div>
+  </div>
+
+  <audio id="bgmAudio" src="bgm.mp3" loop></audio>
+  <div class="floating-particles" id="floatingParticles"></div>
+
+  <div class="social-proof" id="socialProof">
+    <div class="social-proof-avatar" id="socialAvatar">A</div>
+    <div class="social-proof-text">
+      <div id="socialName" style="font-weight: 600; color: #fff;">Player</div>
+      purchased <span class="social-proof-uc" id="socialUC">660 UC</span>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span class="toast-text" id="toastText">Copied!</span>
+  </div>
+
+  <div class="container">
+    
+    <div class="top-card">
+      <div class="header">
+        <img src="ucify.webp" alt="UCify Logo" class="logo-img" draggable="false" style="pointer-events: auto; cursor: pointer;" onclick="handleLogoClick()">
+        <p class="tagline" id="dispTagline">BGMI UC • Lightning-fast delivery</p>
+
+        <div class="partner-block" id="partnerBlock">
+          <img src="bgmi-official.webp" alt="BGMI Official" class="official-logo" draggable="false">
+        </div>
+
+        <div class="trust-strip" id="dispTrustStrip">
+          <div class="trust-pill" id="pillSecure"><i class="fa-solid fa-lock"></i> <span id="dispSecureBadge">Secure</span></div>
+          <div class="trust-pill" id="pillInstant"><i class="fa-solid fa-bolt"></i> <span id="dispInstantBadge">Instant</span></div>
+          <div class="trust-pill" id="pillSupport"><i class="fa-solid fa-headset"></i> <span id="dispSupportBadge">24/7</span></div>
+        </div>
+
+        <div class="live-stats" id="dispLiveStats">
+          <div class="stat-badge" id="pillStats">
+            <i class="fa-solid fa-earth-asia" style="color: var(--accent);"></i>
+            <span id="liveOrders" class="stat-number">1425</span> <span id="dispOrdersToday">Orders Today</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-container">
+        <div class="progress-step active" data-step="1">1</div>
+        <div class="progress-line" id="line1"></div> <div class="progress-step" data-step="2">2</div>
+        <div class="progress-line" id="line2"></div>
+        <div class="progress-step" data-step="3">3</div>
+        <div class="progress-line" id="line3"></div>
+        <div class="progress-step" data-step="4"><i class="fa-solid fa-check"></i></div>
+      </div>
+    </div>
+
+    <!-- STEP 1: PLAYER DETAILS -->
+    <div id="step1" class="step active">
+      <div class="step-content">
+        <h2 class="step-title" id="dispStep1Title">Player Details</h2>
+        <p class="subnote">Enter your BGMI ID to verify account</p>
+
+        <div class="form-group">
+          <label class="form-label">BGMI Character ID (UID)</label>
+          <div class="form-input-wrapper">
+            <input type="tel" class="form-input" id="uid" placeholder="" maxlength="12" inputmode="numeric">
+            <i class="input-icon" id="uidIcon"></i>
+          </div>
+          <div class="error-message" id="uidError">Invalid UID Format</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">BGMI ID Name</label>
+          <div class="form-input-wrapper">
+            <input type="text" class="form-input" id="ign" placeholder="" maxlength="20">
+            <i class="input-icon" id="ignIcon"></i>
+          </div>
+          <div class="error-message" id="ignError">Name Required</div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" id="next1" disabled>Verify & Continue <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: SELECT PACK -->
+    <div id="step2" class="step">
+      <div class="step-content">
+        <h2 class="step-title" id="dispStep2Title">Select BGMI UC Packs</h2>
+        <p class="subnote">Top up for <span id="displayUid" style="color:var(--primary);">--</span> (<span id="displayIgn" style="color:#fff;">--</span>)</p>
+
+        <!-- TRIAL UC PACK SECTION -->
+        <h3 class="pack-section-title" id="trialPackTitle">Trial UC Pack</h3>
+        <div class="packs-grid" id="trialPacksGrid">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- BULK UC PACK SECTION -->
+        <h3 class="pack-section-title">Bulk UC Pack</h3>
+        <div class="packs-grid" id="bulkPacksGrid">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <div class="btn-row">
+           <button type="button" class="btn btn-secondary" id="backToDetails">Back</button>
+           <button type="button" class="btn btn-primary" id="next2" disabled>Checkout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: PAYMENT -->
+    <div id="step3" class="step">
+      <div class="step-content">
+        <h2 class="step-title" id="dispStep3Title">Payment</h2>
+        <p class="subnote" id="dispStep3Subnote">Scan & pay using any UPI app</p>
+
+        <div class="payment-section">
+          
+          <!-- MAINTENANCE UI -->
+          <div id="maintenanceUI" class="maintenance-box">
+             <i class="fas fa-tools" style="color: var(--error); font-size: 32px; margin-bottom: 12px;"></i>
+             <div style="font-family: var(--font-display); font-weight: 700; color: #fff; font-size: 20px;" id="dispMaintenanceText">Payment System Under Maintenance</div>
+             <div style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">Please try again later or contact support.</div>
+          </div>
+
+          <!-- LOCK UI FOR RAZORPAY CLASH PREVENTION -->
+          <div id="lockUI" class="lock-ui-box">
+             <i class="fas fa-user-clock" style="font-size: 34px; color: var(--primary); margin-bottom: 12px;"></i>
+             <h3 style="color: #fff; font-family: var(--font-display); margin-bottom: 8px; font-size: 22px;">System Busy</h3>
+             <p style="font-size: 13px; color: #ccc; margin-bottom: 15px; line-height: 1.4;">Another user is currently completing a payment for this specific pack. To prevent transaction mix-ups, please wait or use the instant UPI option.</p>
+             <div class="lock-timer-text" id="lockUITimer">02:00</div>
+             <div class="btn-row" style="margin-top: 15px;">
+                <button class="btn btn-secondary" style="padding: 12px; font-size: 13px;" onclick="cancelLockWait()">Cancel</button>
+                <button class="btn btn-primary" style="padding: 12px; font-size: 13px;" onclick="checkLockAgain()">Check Again</button>
+             </div>
+          </div>
+
+          <!-- NORMAL PAYMENT UI -->
+          <div id="normalPaymentUI">
+            <div style="font-size: 14px; margin-bottom: 5px; color: var(--text-muted);" id="dispTotalPayable">TOTAL PAYABLE (EXACT)</div>
+            <div style="font-size: 36px; font-weight: 800; color: var(--primary); font-family: var(--font-display); margin-bottom: 20px; text-shadow: 0 0 20px rgba(255,184,0,0.3);">
+              <span id="paymentAmount">₹0</span>
+            </div>
+
+            <div id="highValueWarning" class="high-value-warning">
+               <i class="fa-solid fa-triangle-exclamation"></i> <strong id="dispWarnTitle">Limit Warning:</strong> <span id="dispWarnDesc">Personal UPI limits often fail for amounts over ₹2000.</span>
+            </div>
+
+            <!-- UPI QR CODE CARD -->
+            <div class="qr-card" id="upiCard">
+              <div class="qr-box">
+                 <div id="qrLoader" class="qr-skeleton"></div>
+                 <img id="staticQrImage" src="" alt="Scan QR" style="width:100%; height:100%; object-fit:contain; display:none; pointer-events: auto;" draggable="false">
+              </div>
+              
+              <div class="qr-timer" id="qrTimer" style="display:none;">
+                <i class="fa-regular fa-clock"></i> <span id="timerDisplay">15:00</span>
+              </div>
+            </div>
+
+            <!-- RAZORPAY CARD -->
+            <div class="qr-card" id="razorpayCard" style="display:none; text-align:center; padding: 30px 20px;">
+               <div style="color:#fff; font-weight:700; font-size: 18px; margin-bottom:15px;">Secure Payment</div>
+               <button class="btn btn-primary" id="rzpRedirectBtn" style="background:#3399cc; color:#fff; box-shadow: 0 5px 15px rgba(51, 153, 204, 0.4);">
+                  Pay Now <i class="fas fa-external-link-alt" style="margin-left: 5px;"></i>
+               </button>
+               <div style="font-size:12px; color:#aaa; margin-top:15px; line-height: 1.4;">
+                  Clicking "Pay Now" will securely open the payment page.<br>
+                  <strong style="color:var(--primary);">Amount (₹<span id="rzpExactAmountText"></span>) will be auto-filled.</strong>
+               </div>
+            </div>
+
+            <!-- Automated Verification UI Container -->
+            <div id="verificationStatus" class="auto-verify-box">
+                <!-- Inner HTML is injected dynamically via JS using siteConfig -->
+            </div>
+
+            <!-- Supported UPI Apps -->
+            <div id="dispUpiAppsBanner" class="upi-apps-container" style="margin-top: 20px; text-align: center;">
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;" id="dispUpiBanner">Scan & Pay From Any UPI App</div>
+                <div style="display: flex; justify-content: center; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; color: #fff; display: flex; align-items: center; justify-content: center; height: 34px;">
+                        <i class="fab fa-google-pay" style="font-size: 28px;"></i>
+                    </div>
+                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 700; font-size: 12px; color: #5f259f; display: flex; align-items: center; justify-content: center; height: 34px;">
+                        PhonePe
+                    </div>
+                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 800; font-size: 13px; color: #00baf2; display: flex; align-items: center; justify-content: center; height: 34px; font-style: italic;">
+                        Paytm
+                    </div>
+                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; color: #fff; display: flex; align-items: center; justify-content: center; height: 34px;">
+                        <i class="fab fa-amazon-pay" style="font-size: 24px;"></i>
+                    </div>
+                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 700; font-size: 12px; color: #ff7d00; display: flex; align-items: center; justify-content: center; height: 34px;">
+                        BHIM
+                    </div>
+                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 600; font-size: 13px; color: #25D366; display: flex; align-items: center; justify-content: center; height: 34px; gap: 5px;">
+                        <i class="fab fa-whatsapp" style="font-size: 16px;"></i> Pay
+                    </div>
+                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 800; font-size: 11px; color: #fff; display: flex; align-items: center; justify-content: center; height: 34px; letter-spacing: 1px;">
+                        CRED
+                    </div>
+                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 700; font-size: 12px; color: #ffad00; display: flex; align-items: center; justify-content: center; height: 34px;">
+                        FamPay
+                    </div>
+                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 700; font-size: 12px; color: #0052cc; display: flex; align-items: center; justify-content: center; height: 34px;">
+                        MobiKwik
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row" style="margin-top: 20px;" id="dispCancelBtnWrap">
+          <button type="button" class="btn btn-secondary" id="back3"><span id="dispCancelBtn">Go Back</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4: SUCCESS -->
+    <div id="step4" class="step">
+      <div class="step-content success-screen">
+        <div class="success-icon"><i class="fa-regular fa-circle-check"></i></div>
+        <h2 class="success-title" id="dispSuccessTitle">Order Confirmed</h2>
+        
+        <div class="game-loader-wrap" id="gameLoaderWrap">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                <span class="delivery-msg" id="deliveryMsg">Connecting to BGMI Servers...</span>
+                <span class="timer-text" id="deliveryTimer">07:00</span>
+            </div>
+            <div class="game-bar-bg">
+                <div class="game-bar-fill" id="gameBarFill"></div>
+            </div>
+        </div>
+
+        <div class="night-msg" id="nightMessage">
+             <i class="fas fa-moon" style="margin-bottom: 8px; font-size: 18px;"></i><br>
+             <strong id="dispNightTitle">Night Mode Active</strong><br>
+             <span id="dispNightDesc">Instant delivery paused. UC will be credited after 9:00 AM.</span>
+        </div>
+
+        <div class="final-success-msg" id="dispFinalSuccessMsg">
+             UC Transfer Complete.
+        </div>
+
+        <div class="receipt-box" id="dispReceiptBox">
+          <div style="color: var(--primary); margin-bottom: 15px; font-weight: 700; display:flex; justify-content:space-between;">
+             <span id="dispReceiptTitle">RECEIPT</span>
+             <span><span id="orderIdText" style="color: #fff; cursor: pointer;" onclick="copyOrderId()">--</span> <i class="fa-solid fa-copy" style="font-size:12px; margin-left:5px;"></i></span>
+          </div>
+          <div class="receipt-row"><span class="receipt-label" id="dispLblPack">Pack</span><span class="receipt-value" id="receipt-pack">--</span></div>
+          <div class="receipt-row"><span class="receipt-label" id="dispLblAmount">Amount Paid</span><span class="receipt-value" id="receipt-amount">--</span></div>
+          <div class="receipt-row"><span class="receipt-label" id="dispLblUid">UID</span><span class="receipt-value" id="receipt-uid">--</span></div>
+          <div class="receipt-row"><span class="receipt-label" id="dispLblIgn">IGN</span><span class="receipt-value" id="receipt-ign">--</span></div>
+          <div class="receipt-row"><span class="receipt-label" id="dispLblTime">Time</span><span class="receipt-value" id="receipt-time">--</span></div>
+        </div>
+
+        <div id="newOrderBtnWrap" style="margin-top: 20px;">
+          <button type="button" class="btn btn-primary" onclick="location.reload()" id="newOrderBtn"><span id="dispBtnNewOrder">Place Another Order</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SITE FOOTER -->
+  <div class="site-footer">
+    <div class="footer-managed" id="footerKrafton">
+      Managed by <strong>Krafton Inc.</strong>
+    </div>
+    <div class="footer-links">
+      <a id="linkTerms" onclick="openModal('termsModal')">Terms & Conditions</a>
+      <a id="linkPrivacy" onclick="openModal('privacyModal')">Privacy Policy</a>
+      <a id="linkRefund" onclick="openModal('refundModal')">Refund & Cancellation</a>
+      <a id="linkShipping" onclick="openModal('shippingModal')">Shipping Policy</a>
+      <a id="linkContact" onclick="openModal('contactModal')">Contact Us</a>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <div class="modal-overlay" id="termsModal" onclick="closeModalOutside(event, 'termsModal')"><div class="modal-box"><div class="modal-header"><h3>Terms & Conditions</h3><button class="close-btn" onclick="closeModal('termsModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyTerms"></div></div></div>
+  <div class="modal-overlay" id="privacyModal" onclick="closeModalOutside(event, 'privacyModal')"><div class="modal-box"><div class="modal-header"><h3>Privacy Policy</h3><button class="close-btn" onclick="closeModal('privacyModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyPrivacy"></div></div></div>
+  <div class="modal-overlay" id="refundModal" onclick="closeModalOutside(event, 'refundModal')"><div class="modal-box"><div class="modal-header"><h3>Refund & Cancellation</h3><button class="close-btn" onclick="closeModal('refundModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyRefund"></div></div></div>
+  <div class="modal-overlay" id="shippingModal" onclick="closeModalOutside(event, 'shippingModal')"><div class="modal-box"><div class="modal-header"><h3>Shipping & Delivery</h3><button class="close-btn" onclick="closeModal('shippingModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyShipping"></div></div></div>
+  <div class="modal-overlay" id="contactModal" onclick="closeModalOutside(event, 'contactModal')"><div class="modal-box"><div class="modal-header"><h3>Contact Us</h3><button class="close-btn" onclick="closeModal('contactModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyContact"></div></div></div>
+
+  <!-- ADMIN MODALS -->
+  <div class="modal-overlay" id="adminLoginModal" onclick="closeModalOutside(event, 'adminLoginModal')">
+    <div class="modal-box">
+       <div class="modal-header">
+           <h3>Admin Login</h3>
+           <button class="close-btn" onclick="closeModal('adminLoginModal')"><i class="fas fa-times"></i></button>
+       </div>
+       <div class="modal-body">
+          <div class="form-group">
+             <label class="form-label">Admin ID or Email</label>
+             <input type="text" class="form-input" id="adminUser" placeholder="Enter Admin ID">
+          </div>
+          <div class="form-group">
+             <label class="form-label">Password</label>
+             <input type="password" class="form-input" id="adminPass" placeholder="Enter password">
+          </div>
+          <div class="error-message" id="adminError" style="margin-bottom: 15px;">Invalid Credentials</div>
+          <button type="button" class="btn btn-primary" onclick="verifyAdmin()">Login</button>
+       </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="adminPanelModal" onclick="closeModalOutside(event, 'adminPanelModal')">
+    <div class="modal-box" style="max-width: 500px;">
+       <div class="modal-header">
+           <h3>Admin Control Panel</h3>
+           <button class="close-btn" onclick="closeModal('adminPanelModal')"><i class="fas fa-times"></i></button>
+       </div>
+       <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+          
+          <!-- SECURITY SECTION -->
+          <h4 class="admin-section-title" style="margin-top:0; color: var(--success);">🔐 Admin Security</h4>
+          <p style="font-size: 11px; color: #aaa; margin-bottom: 10px;">Update your admin login details here. Saved securely.</p>
+          <div class="admin-subsection" style="border-left: 2px solid var(--success);">
+              <div class="form-group" style="margin-bottom:10px;">
+                 <label style="font-size:11px; color:#aaa; margin-bottom: 5px; display: block;">New Username</label>
+                 <input type="text" class="form-input" id="adminSetUser" placeholder="Username" style="font-size:12px; padding:10px;">
+              </div>
+              <div class="form-group" style="margin-bottom:5px;">
+                 <label style="font-size:11px; color:#aaa; margin-bottom: 5px; display: block;">New Password</label>
+                 <input type="text" class="form-input" id="adminSetPass" placeholder="Password" style="font-size:12px; padding:10px;">
+              </div>
+          </div>
+
+          <!-- PAYMENT MODE SETTINGS -->
+          <h4 class="admin-section-title">⚖️ Payment Mode</h4>
+          <p style="font-size: 11px; color: #aaa; margin-bottom: 10px;">Choose your active payment method (UPI vs Razorpay).</p>
+          <div class="admin-subsection" style="border-left: 2px solid #3399cc;">
+              <select id="adminPaymentMode" class="form-input" style="padding: 10px; margin-bottom: 10px;">
+                  <option value="upi">UPI (Dynamic QR)</option>
+                  <option value="razorpay">Razorpay (Link Redirect)</option>
+              </select>
+              
+              <div id="adminRazorpayFields" style="margin-top: 15px;">
+                  <label style="font-size:11px; color:#aaa; margin-bottom: 5px; display: block;">Razorpay Global / Base Links (For load balancing)</label>
+                  <div id="adminRzpLinkList"></div>
+                  <div class="admin-input-group">
+                     <input type="text" id="newRzpLink" class="form-input" placeholder="Enter Razorpay Link" style="padding: 10px; width: 70%;">
+                     <button class="btn btn-primary" onclick="addNewRzpLink()" style="padding: 10px; width: 30%;"><i class="fas fa-plus"></i> Add</button>
+                  </div>
+                  
+                  <label style="font-size:11px; color:#aaa; margin-bottom: 5px; display: block; margin-top: 15px;">Razorpay Webhook Google Sheet App URL</label>
+                  <input type="text" id="adminRazorpayApi" class="form-input" placeholder="https://script.google.com/macros/s/.../exec" style="font-size:12px; padding:10px;">
+              </div>
+          </div>
+
+          <!-- UPI Settings -->
+          <h4 class="admin-section-title">💳 UPI QR Setup (If UPI Selected)</h4>
+          <p style="font-size: 11px; color: #aaa; margin-bottom: 10px;">Add active UPI IDs. If list is empty and UPI mode is on, maintenance mode will turn on.</p>
+          <div id="adminUpiList"></div>
+          <div class="admin-input-group">
+             <input type="text" id="newUpiId" class="form-input" placeholder="Enter UPI ID (e.g. name@bank)" style="padding: 10px; width: 70%;">
+             <button class="btn btn-primary" onclick="addNewUpi()" style="padding: 10px; width: 30%;"><i class="fas fa-plus"></i> Add</button>
+          </div>
+
+          <!-- Dynamic Text Editing with Toggles -->
+          <h4 class="admin-section-title">✏️ Advanced Site Texts Editor</h4>
+          <p style="font-size: 11px; color: #aaa; margin-bottom: 10px;">Check/Uncheck the box to Hide/Show. Edit text to update website.</p>
+          
+          <div class="admin-subsection">
+              <label style="font-size:12px; color:var(--primary); font-weight:600;">Top Header & Badges</label>
+              <div class="flex-row-center"><input type="checkbox" id="tgl_tagline" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextTagline" placeholder="Tagline" style="font-size:12px; padding:8px;"></div>
+              <div class="flex-row-center"><input type="checkbox" id="tgl_secureBadge" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextSecure" placeholder="Secure" style="font-size:12px; padding:8px;"></div>
+              <div class="flex-row-center"><input type="checkbox" id="tgl_instantBadge" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextInstant" placeholder="Instant" style="font-size:12px; padding:8px;"></div>
+              <div class="flex-row-center"><input type="checkbox" id="tgl_supportBadge" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextSupport" placeholder="24/7" style="font-size:12px; padding:8px;"></div>
+              <div class="flex-row-center"><input type="checkbox" id="tgl_ordersToday" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextOrders" placeholder="Orders Today" style="font-size:12px; padding:8px;"></div>
+          </div>
+
+          <div class="admin-subsection">
+              <label style="font-size:12px; color:var(--primary); font-weight:600;">Main Titles</label>
+              <div class="flex-row-center"><input type="checkbox" id="tgl_step1Title" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextStep1" placeholder="Step 1 Title" style="font-size:12px; padding:8px;"></div>
+              <div class="flex-row-center"><input type="checkbox" id="tgl_step2Title" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextStep2" placeholder="Step 2 Title" style="font-size:12px; padding:8px;"></div>
+              <div class="flex-row-center"><input type="checkbox" id="tgl_step3Title" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextStep3" placeholder="Step 3 Title" style="font-size:12px; padding:8px;"></div>
+          </div>
+
+          <div class="admin-subsection">
+              <label style="font-size:12px; color:var(--primary); font-weight:600;">Payment Page Texts</label>
+              <div class="flex-row-center"><input type="checkbox" id="tgl_step3Subnote" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextStep3Subnote" placeholder="Scan & pay..." style="font-size:12px; padding:8px;"></div>
+              <div class="flex-row-center"><input type="checkbox" id="tgl_totalPayable" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextTotalPay" placeholder="TOTAL PAYABLE (EXACT)" style="font-size:12px; padding:8px;"></div>
+              
+              <!-- Warning box -->
+              <div class="flex-row-center"><input type="checkbox" id="tgl_warnBanner" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextWarnTitle" placeholder="Warn Title" style="font-size:12px; padding:8px; width:40%;"><input type="text" class="form-input" id="adminTextWarnDesc" placeholder="Warn Desc" style="font-size:12px; padding:8px; width:60%;"></div>
+              
+              <!-- Awaiting Texts (Controlled by 1 toggle) -->
+              <div style="display:flex; align-items:flex-start; gap:8px; width:100%; margin-bottom:5px;">
+                 <input type="checkbox" id="tgl_awaitingStatus" class="admin-toggle-box" style="margin-top:10px;">
+                 <div style="display:flex; flex-direction:column; gap:5px; width:100%;">
+                    <input type="text" class="form-input" id="adminTextAwaitTitle" placeholder="Awaiting Payment..." style="font-size:12px; padding:8px;">
+                    <input type="text" class="form-input" id="adminTextAwaitDesc1" placeholder="Please pay exactly" style="font-size:12px; padding:8px;">
+                    <input type="text" class="form-input" id="adminTextAwaitDesc2" placeholder="Our system will detect..." style="font-size:12px; padding:8px;">
+                 </div>
+              </div>
+
+              <div class="flex-row-center"><input type="checkbox" id="tgl_upiBannerText" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextUpiBanner" placeholder="Scan & Pay From Any UPI App" style="font-size:12px; padding:8px;"></div>
+              <div class="flex-row-center"><input type="checkbox" id="tgl_cancelBtn" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextCancelBtn" placeholder="Cancel / Go Back Button" style="font-size:12px; padding:8px;"></div>
+          </div>
+
+          <!-- SUCCESS SCREEN TEXTS -->
+          <div class="admin-subsection" style="border-left: 2px solid var(--success);">
+              <label style="font-size:12px; color:var(--success); font-weight:600;"><i class="fa-regular fa-circle-check"></i> Step 4 (Success Screen)</label>
+              <div class="flex-row-center" style="margin-top:5px;"><input type="checkbox" id="tgl_successTitle" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextSuccessTitle" placeholder="Order Confirmed" style="font-size:12px; padding:8px;"></div>
+              <div class="flex-row-center"><input type="checkbox" checked disabled class="admin-toggle-box" style="opacity: 0.5;"><input type="text" class="form-input" id="adminTextFinalMsg" placeholder="UC Transfer Complete." style="font-size:12px; padding:8px;"></div>
+              <div class="flex-row-center"><input type="checkbox" checked disabled class="admin-toggle-box" style="opacity: 0.5;"><input type="text" class="form-input" id="adminTextBtnNew" placeholder="Place Another Order" style="font-size:12px; padding:8px;"></div>
+              
+              <!-- RECEIPT EDITING -->
+              <div style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                 <div class="flex-row-center" style="margin-bottom: 8px;">
+                    <input type="checkbox" id="tgl_showReceipt" class="admin-toggle-box">
+                    <label style="font-size: 12px; color: #fff; font-weight: 600;">Show Receipt Box</label>
+                 </div>
+                 <input type="text" class="form-input" id="adminTextReceiptTitle" placeholder="RECEIPT" style="font-size:11px; padding:6px; margin-bottom:5px; width: 100%;">
+                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+                    <input type="text" class="form-input" id="adminTextLblPack" placeholder="Pack" style="font-size:11px; padding:6px;">
+                    <input type="text" class="form-input" id="adminTextLblAmount" placeholder="Amount Paid" style="font-size:11px; padding:6px;">
+                    <input type="text" class="form-input" id="adminTextLblUid" placeholder="UID" style="font-size:11px; padding:6px;">
+                    <input type="text" class="form-input" id="adminTextLblIgn" placeholder="IGN" style="font-size:11px; padding:6px;">
+                    <input type="text" class="form-input" id="adminTextLblTime" placeholder="Time" style="font-size:11px; padding:6px;">
+                 </div>
+              </div>
+          </div>
+
+          <!-- Night Mode Section -->
+          <div class="admin-subsection" style="border-left: 2px solid var(--accent);">
+              <label style="font-size:12px; color:var(--accent); font-weight:600;"><i class="fas fa-moon"></i> Night Mode (Shop Closed Config)</label>
+              <div class="flex-row-center" style="margin-top:8px;">
+                  <input type="checkbox" id="tgl_enableNightMode" class="admin-toggle-box">
+                  <span style="color:#fff; font-size:13px; font-weight:bold;">Enable Shop Closed Logic</span>
+              </div>
+              <div style="display:flex; gap:10px; margin-top:10px; margin-bottom:10px;">
+                  <div style="flex:1;">
+                      <label style="font-size:10px; color:#aaa;">Close Shop At (Hour 0-23)</label>
+                      <input type="number" class="form-input" id="adminNightStart" placeholder="e.g. 0 for Midnight" style="font-size:12px; padding:8px;">
+                  </div>
+                  <div style="flex:1;">
+                      <label style="font-size:10px; color:#aaa;">Open Shop At (Hour 0-23)</label>
+                      <input type="number" class="form-input" id="adminNightEnd" placeholder="e.g. 9 for 9 AM" style="font-size:12px; padding:8px;">
+                  </div>
+              </div>
+              <input type="text" class="form-input" id="adminTextNightTitle" placeholder="Night Mode Title" style="font-size:12px; padding:8px; margin-bottom:5px;">
+              <textarea class="form-input" id="adminTextNightDesc" rows="2" placeholder="Night mode description..." style="font-size:12px; padding:8px; line-height: 1.4; resize: vertical; margin-bottom:5px;"></textarea>
+          </div>
+
+          <div class="admin-subsection">
+              <label style="font-size:12px; color:var(--error); font-weight:600;">Maintenance Mode Text</label>
+              <input type="text" class="form-input" id="adminTextMaintenance" placeholder="Payment System Under Maintenance" style="font-size:12px; padding:8px; margin-top:5px;">
+          </div>
+          
+          <!-- General Component Toggles -->
+          <h4 class="admin-section-title">👁️ General Component Toggles</h4>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 12px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: var(--radius-sm);">
+             <div style="display: flex; align-items: center; gap: 10px;">
+                 <input type="checkbox" id="adminShowLogo" style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
+                 <label for="adminShowLogo" style="color: #fff; font-size: 13px; cursor: pointer;">Show BGMI Official Partner Logo</label>
+             </div>
+             <div style="display: flex; align-items: center; gap: 10px;">
+                 <input type="checkbox" id="adminShowProof" style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
+                 <label for="adminShowProof" style="color: #fff; font-size: 13px; cursor: pointer;">Show Fake Social Proof Popup (Bottom Left)</label>
+             </div>
+             <div style="display: flex; align-items: center; gap: 10px;">
+                 <input type="checkbox" id="adminShowUpiIcons" style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
+                 <label for="adminShowUpiIcons" style="color: #fff; font-size: 13px; cursor: pointer;">Show Supported UPI App Logos Banner (Payment Page)</label>
+             </div>
+             <div style="display: flex; align-items: center; gap: 10px;">
+                 <input type="checkbox" id="adminShowKrafton" style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
+                 <label for="adminShowKrafton" style="color: #fff; font-size: 13px; cursor: pointer;">Show 'Managed by Krafton Inc.' (Footer)</label>
+             </div>
+          </div>
+
+          <!-- Legal & Policies Edit/Toggle -->
+          <h4 class="admin-section-title">📄 Legal & Policies (Footer)</h4>
+          <p style="font-size: 11px; color: #aaa; margin-bottom: 10px;">Toggle visibility and edit HTML content for footer policies.</p>
+          
+          <div class="form-group" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: var(--radius-sm);">
+             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;"><input type="checkbox" id="adminShowTerms" class="admin-toggle-box"><label for="adminShowTerms" style="color: #fff; font-size: 13px; font-weight: bold; cursor: pointer;">Show Terms & Conditions</label></div>
+             <textarea class="form-input" id="adminContentTerms" rows="3" style="font-size:12px; padding:10px; line-height: 1.4; resize: vertical;"></textarea>
+          </div>
+          <div class="form-group" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: var(--radius-sm);">
+             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;"><input type="checkbox" id="adminShowPrivacy" class="admin-toggle-box"><label for="adminShowPrivacy" style="color: #fff; font-size: 13px; font-weight: bold; cursor: pointer;">Show Privacy Policy</label></div>
+             <textarea class="form-input" id="adminContentPrivacy" rows="3" style="font-size:12px; padding:10px; line-height: 1.4; resize: vertical;"></textarea>
+          </div>
+          <div class="form-group" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: var(--radius-sm);">
+             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;"><input type="checkbox" id="adminShowRefund" class="admin-toggle-box"><label for="adminShowRefund" style="color: #fff; font-size: 13px; font-weight: bold; cursor: pointer;">Show Refund & Cancellation</label></div>
+             <textarea class="form-input" id="adminContentRefund" rows="3" style="font-size:12px; padding:10px; line-height: 1.4; resize: vertical;"></textarea>
+          </div>
+          <div class="form-group" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: var(--radius-sm);">
+             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;"><input type="checkbox" id="adminShowShipping" class="admin-toggle-box"><label for="adminShowShipping" style="color: #fff; font-size: 13px; font-weight: bold; cursor: pointer;">Show Shipping Policy</label></div>
+             <textarea class="form-input" id="adminContentShipping" rows="3" style="font-size:12px; padding:10px; line-height: 1.4; resize: vertical;"></textarea>
+          </div>
+          <div class="form-group" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: var(--radius-sm);">
+             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;"><input type="checkbox" id="adminShowContact" class="admin-toggle-box"><label for="adminShowContact" style="color: #fff; font-size: 13px; font-weight: bold; cursor: pointer;">Show Contact Us</label></div>
+             <textarea class="form-input" id="adminContentContact" rows="3" style="font-size:12px; padding:10px; line-height: 1.4; resize: vertical;"></textarea>
+          </div>
+          
+          <!-- Manage Trial Packs -->
+          <h4 class="admin-section-title">📦 Manage Trial Packs (w/ Razorpay Links)</h4>
+          <div id="adminTrialPacksList"></div>
+          
+          <!-- Manage Bulk Packs -->
+          <h4 class="admin-section-title">💎 Manage Bulk Packs (w/ Razorpay Links)</h4>
+          <div id="adminBulkPacksList"></div>
+          
+          <!-- Add New Pack -->
+          <h4 class="admin-section-title">➕ Add New Pack</h4>
+          <div class="admin-input-group">
+             <select id="newPackType" class="form-input" style="padding: 10px; width: 30%;">
+                <option value="trial">Trial</option>
+                <option value="bulk">Bulk</option>
+             </select>
+             <input type="number" id="newPackUc" class="form-input" placeholder="UC" style="padding: 10px; width: 30%;">
+             <input type="number" id="newPackPrice" class="form-input" placeholder="₹" style="padding: 10px; width: 30%;">
+             <button class="btn btn-primary" onclick="addNewPack()" style="padding: 10px; width: auto;"><i class="fas fa-plus"></i></button>
+          </div>
+          
+          <hr style="border-color: #333; margin: 30px 0 20px;">
+          <button type="button" class="btn btn-primary" id="adminSaveBtn" onclick="saveAdminSettings()">Save All Changes</button>
+       </div>
+    </div>
+  </div>
+
+  <!-- LOADER REMOVAL LOGIC -->
+  <script>
+    function hideInitialLoader() {
+        const loader = document.getElementById('initial-loader');
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.visibility = 'hidden';
+                loader.remove(); 
+            }, 500);
+        }
+    }
+  </script>
+
+  <!-- SCRIPT 1: FIREBASE BACKEND CONNECTION MODULE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    let firebaseConfig = {
+      apiKey: "AIzaSyCBNZV_Tp3NqCBed-PRW2nXOzSILVQq4iY",
+      authDomain: "ucify-store.firebaseapp.com",
+      projectId: "ucify-store",
+      storageBucket: "ucify-store.firebasestorage.app",
+      messagingSenderId: "747484525638",
+      appId: "1:747484525638:web:7f185399c21655b5bc0647"
+    };
+    
+    let appId = firebaseConfig.appId;
+
+    if (typeof __firebase_config !== 'undefined') {
+        firebaseConfig = JSON.parse(__firebase_config);
+        appId = typeof __app_id !== 'undefined' ? __app_id : appId;
+    }
+
+    let app, auth, db;
+    try {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        window.firebaseDb = db; // Exporting for lock logic
+    } catch(e) {
+        console.warn("Firebase config is missing or invalid. Using local storage mode only.");
+        hideInitialLoader(); 
+    }
+
+    // --- GLOBAL SMART LOCK SYSTEM FUNCTIONS ---
+    window.acquireLock = async function(amountStr, currentOrderId) {
+        if (!db) return true; // Fail-safe agar firebase na ho
+        try {
+            const lockRef = doc(db, 'artifacts', appId, 'public', 'data', 'payment_locks', amountStr);
+            const lockSnap = await getDoc(lockRef);
+            const now = Date.now();
+            
+            if (lockSnap.exists()) {
+                const lockData = lockSnap.data();
+                // 2 mins = 120000 ms. Backend strictly matched with UI 2-min timer.
+                if (now - lockData.timestamp < 120000 && lockData.orderId !== currentOrderId) {
+                    return false; // Locked by someone else
+                }
+            }
+            await setDoc(lockRef, { orderId: currentOrderId, timestamp: now });
+            return true;
+        } catch (e) {
+            console.error("Lock error:", e);
+            return true; // Let them through if network error
+        }
+    };
+
+    window.releaseLock = async function(amountStr) {
+        if (!db || !amountStr) return;
+        try {
+            const lockRef = doc(db, 'artifacts', appId, 'public', 'data', 'payment_locks', amountStr);
+            await deleteDoc(lockRef);
+        } catch (e) { }
+    };
+
+    window.saveConfigToDB = async function(newConfig) {
+        if(!db || !auth.currentUser) return false;
+        try {
+            const configRef = doc(db, 'artifacts', appId, 'public', 'data', 'ucifyConfig', 'main');
+            await setDoc(configRef, newConfig);
+            return true;
+        } catch(e) {
+            console.error("Database save failed:", e);
+            return false;
+        }
+    };
+
+    const initAuth = async () => {
+        if(!auth) return;
+        try {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await signInAnonymously(auth);
+            }
+        } catch (e) {
+            console.error("Auth Error:", e);
+            hideInitialLoader(); 
+        }
+    };
+
+    initAuth();
+
+    if(auth && db) {
+        onAuthStateChanged(auth, (user) => {
+            if (!user) return;
+            
+            const configRef = doc(db, 'artifacts', appId, 'public', 'data', 'ucifyConfig', 'main');
+            onSnapshot(configRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const dbConfig = docSnap.data();
+                    
+                    if(!dbConfig.texts) dbConfig.texts = window.siteConfig.texts || defaultAdminConfig.texts;
+                    if(!dbConfig.toggles) dbConfig.toggles = window.siteConfig.toggles || defaultAdminConfig.toggles;
+                    if(!dbConfig.policies) dbConfig.policies = window.siteConfig.policies || defaultAdminConfig.policies;
+                    if(!dbConfig.shopTiming) dbConfig.shopTiming = window.siteConfig.shopTiming || defaultAdminConfig.shopTiming;
+                    if(!dbConfig.adminAuth) dbConfig.adminAuth = window.siteConfig.adminAuth || defaultAdminConfig.adminAuth;
+
+                    if(!dbConfig.paymentMode) dbConfig.paymentMode = "upi";
+                    
+                    if(dbConfig.razorpayLinks === undefined) dbConfig.razorpayLinks = [];
+                    // Migrate older single link to multiple array format
+                    if(dbConfig.razorpayLink && dbConfig.razorpayLinks.length === 0) {
+                        dbConfig.razorpayLinks = dbConfig.razorpayLink.split(',').map(l => l.trim()).filter(l => l);
+                        delete dbConfig.razorpayLink;
+                    }
+
+                    if(dbConfig.razorpayApiUrl === undefined) dbConfig.razorpayApiUrl = "";
+                    
+                    const migratePacks = (packs) => {
+                        if(packs) {
+                            packs.forEach(p => {
+                                if(p.rzpLinks === undefined) p.rzpLinks = [];
+                                if(p.rzpLink) {
+                                    p.rzpLinks.push(...p.rzpLink.split(',').map(l=>l.trim()).filter(l=>l));
+                                    delete p.rzpLink;
+                                }
+                            });
+                        }
+                    };
+                    migratePacks(dbConfig.trialPacks);
+                    migratePacks(dbConfig.bulkPacks);
+
+                    window.siteConfig = dbConfig;
+                    
+                    if(typeof window.applyUISettings === 'function') window.applyUISettings();
+                    if(typeof window.renderSitePacks === 'function') window.renderSitePacks();
+                    if(typeof window.renderAdminPacksList === 'function') window.renderAdminPacksList();
+                    if(typeof window.renderAdminUpiList === 'function') window.renderAdminUpiList();
+                    if(typeof window.renderAdminRzpLinksList === 'function') window.renderAdminRzpLinksList();
+                    if(typeof window.injectDynamicStatusUI === 'function') window.injectDynamicStatusUI(); 
+                    
+                } else {
+                    if(window.siteConfig) {
+                        window.saveConfigToDB(window.siteConfig);
+                    }
+                }
+                
+                hideInitialLoader();
+                
+            }, (error) => {
+                console.error("Live Database Listener Error:", error);
+                hideInitialLoader(); 
+            });
+        });
+    }
+  </script>
+
+  <!-- SCRIPT 2: NORMAL WEBSITE LOGIC -->
+  <script>
+    // --- ADMIN SYSTEM VARIABLES ---
+    const defaultAdminConfig = {
+        adminAuth: { u: "c3lub3g=", p: "bW9vbnRhZ2U=" },
+        paymentMode: "upi", 
+        razorpayLinks: [],
+        razorpayApiUrl: "", 
+        upiIds: [], 
+        shopTiming: { startHour: 0, endHour: 9 },
+        texts: {
+            tagline: "BGMI UC • Lightning-fast delivery",
+            secureBadge: "Secure",
+            instantBadge: "Instant",
+            supportBadge: "24/7",
+            ordersToday: "Orders Today",
+            step1Title: "Player Details",
+            step2Title: "Select BGMI UC Packs",
+            step3Title: "Payment",
+            step3Subnote: "Scan & pay using any UPI app",
+            totalPayable: "TOTAL PAYABLE (EXACT)",
+            warnTitle: "Limit Warning:",
+            warnDesc: "Personal UPI limits often fail for amounts over ₹2000.",
+            awaitingTitle: "Awaiting Payment...",
+            awaitingDesc1: "Please pay exactly",
+            awaitingDesc2: "Our system will detect your payment automatically.",
+            upiBanner: "Scan & Pay From Any UPI App",
+            cancelBtn: "Go Back",
+            maintenance: "Payment System Under Maintenance",
+            nightModeTitle: "Night Mode Active",
+            nightModeDesc: "Instant delivery paused. UC will be credited after 9:00 AM.",
+            successTitle: "Order Confirmed",
+            finalSuccessMsg: "UC Transfer Complete.",
+            receiptTitle: "RECEIPT",
+            lblPack: "Pack",
+            lblAmount: "Amount Paid",
+            lblUid: "UID",
+            lblIgn: "IGN",
+            lblTime: "Time",
+            btnNewOrder: "Place Another Order"
+        },
+        toggles: {
+            showTagline: true, showSecureBadge: true, showInstantBadge: true, showSupportBadge: true, showOrdersToday: true,
+            showStep1Title: true, showStep2Title: true, showStep3Title: true,
+            showStep3Subnote: true, showTotalPayable: true, showWarnBanner: true, showAwaitingStatus: true,
+            showUpiBannerText: true, showCancelBtn: true, showSuccessTitle: true, showReceipt: true,
+            showPartnerLogo: true, showSocialProof: true, showUpiApps: true, showFooterKrafton: true,
+            enableNightMode: true 
+        },
+        policies: {
+            showTerms: true, contentTerms: "<h4>1. Introduction</h4><p>By using this website, you agree to these Terms and Conditions. This platform provides digital top-up services for BGMI UC.</p><h4>2. Services Provided</h4><p>We facilitate the transfer of digital in-game currency (UC) to the provided Player UID. It is the user's responsibility to enter the correct UID.</p><h4>3. Payment</h4><p>All transactions are processed securely via our automated payment methods. We do not store your credit card or banking details.</p><h4>4. User Responsibilities</h4><p>You must ensure the accuracy of the Player ID (UID) provided. Transactions processed to incorrect UIDs due to user error cannot be reversed.</p>",
+            showPrivacy: true, contentPrivacy: "<h4>1. Information We Collect</h4><p>We collect your BGMI Player ID (UID) and In-Game Name (IGN) solely for the purpose of delivering the digital product. We process payments securely and do not store financial data.</p><h4>2. How We Use Your Data</h4><p>Your data is used strictly for order fulfillment, customer support, and transaction verification.</p><h4>3. Data Sharing</h4><p>We do not sell, trade, or rent user data to third parties. Information is only shared with our payment provider as required to process your transaction.</p>",
+            showRefund: true, contentRefund: "<h4>1. Digital Goods Policy</h4><p>Because the products we sell are strictly digital in-game currency, <strong>all sales are final</strong>. Once the UC is successfully transferred to the provided UID, no refunds or cancellations can be processed.</p><h4>2. Failed Transactions</h4><p>If your payment is deducted but the order fails on our end, a full refund will be automatically initiated to your original payment method within 5-7 business days.</p><h4>3. Incorrect UID</h4><p>We are not responsible for UC sent to an incorrect UID provided by the user. No refunds will be issued in such cases.</p>",
+            showShipping: true, contentShipping: "<h4>1. Delivery Method</h4><p>All deliveries are purely digital. No physical product will be shipped to your address.</p><h4>2. Delivery Time</h4><p>UC is typically credited to your account instantly or within 10-15 minutes. In case of server delays, please allow up to 24 hours for the transaction to reflect in your BGMI account.</p>",
+            showContact: true, contentContact: "<h4>Get in Touch</h4><p>If you face any issues with your order, please contact our support team. Have your Order ID and Transaction ID ready.</p><ul><li><strong>Business Name:</strong> Krafton Inc</li><li><strong>Email Support:</strong> ucify.support@gmail.com</li><li><strong>Operating Hours:</strong> Mon - Sat, 10:00 AM to 7:00 PM</li></ul>"
+        },
+        trialPacks: [ { uc: 13, price: 5, rzpLinks: [] } ],
+        bulkPacks: [
+            { uc: 1800, price: 300, rzpLinks: [] },
+            { uc: 4200, price: 600, rzpLinks: [] },
+            { uc: 9600, price: 1200, rzpLinks: [] },
+            { uc: 14800, price: 1800, rzpLinks: [] }
+        ]
+    };
+
+    window.siteConfig = JSON.parse(localStorage.getItem('ucifyAdminConfig')) || defaultAdminConfig;
+    
+    if(window.siteConfig.upiId && !window.siteConfig.upiIds) {
+        window.siteConfig.upiIds = [{ id: window.siteConfig.upiId, active: true }];
+        delete window.siteConfig.upiId;
+    }
+    if(!window.siteConfig.paymentMode) window.siteConfig.paymentMode = "upi";
+    
+    if(window.siteConfig.razorpayLinks === undefined) window.siteConfig.razorpayLinks = [];
+    if(window.siteConfig.razorpayLink && window.siteConfig.razorpayLinks.length === 0) {
+        window.siteConfig.razorpayLinks = window.siteConfig.razorpayLink.split(',').map(l => l.trim()).filter(l => l);
+        delete window.siteConfig.razorpayLink;
+    }
+
+    if(window.siteConfig.razorpayApiUrl === undefined) window.siteConfig.razorpayApiUrl = "";
+    
+    const migratePacks = (packs) => {
+        if(packs) {
+            packs.forEach(p => {
+                if(p.rzpLinks === undefined) p.rzpLinks = [];
+                if(p.rzpLink) {
+                    p.rzpLinks.push(...p.rzpLink.split(',').map(l=>l.trim()).filter(l=>l));
+                    delete p.rzpLink;
+                }
+            });
+        }
+    };
+    migratePacks(window.siteConfig.trialPacks);
+    migratePacks(window.siteConfig.bulkPacks);
+
+    if(!window.siteConfig.texts) window.siteConfig.texts = defaultAdminConfig.texts;
+    for(let k in defaultAdminConfig.texts) { if(window.siteConfig.texts[k] === undefined) window.siteConfig.texts[k] = defaultAdminConfig.texts[k]; }
+    
+    if(!window.siteConfig.toggles) window.siteConfig.toggles = defaultAdminConfig.toggles;
+    for(let k in defaultAdminConfig.toggles) { if(window.siteConfig.toggles[k] === undefined) window.siteConfig.toggles[k] = defaultAdminConfig.toggles[k]; }
+    
+    if(!window.siteConfig.shopTiming) window.siteConfig.shopTiming = defaultAdminConfig.shopTiming;
+    if(!window.siteConfig.policies) window.siteConfig.policies = defaultAdminConfig.policies;
+    if(!window.siteConfig.adminAuth) window.siteConfig.adminAuth = defaultAdminConfig.adminAuth;
+
+    let currentStep = 1;
+    let selectedPack = null;
+    let exactPriceStr = "0.00"; 
+    let orderId = null;
+    let razorpayWindow = null; 
+    let qrTimer = null;
+    let paymentVerificationInterval = null;
+    let timerSeconds = 900;
+    let lockWaitTimer = null;
+    let currentUid = "";
+    let currentIgn = "";
+    let allowSocialProofPopup = true;
+
+    function getText(key) { return window.siteConfig.texts[key] || defaultAdminConfig.texts[key]; }
+    function getTgl(key) { return window.siteConfig.toggles[key] !== false; }
+
+    window.applyUISettings = function() {
+        document.getElementById('dispTagline').textContent = getText('tagline');
+        document.getElementById('dispSecureBadge').textContent = getText('secureBadge');
+        document.getElementById('dispInstantBadge').textContent = getText('instantBadge');
+        document.getElementById('dispSupportBadge').textContent = getText('supportBadge');
+        document.getElementById('dispOrdersToday').textContent = getText('ordersToday');
+        
+        document.getElementById('dispStep1Title').textContent = getText('step1Title');
+        document.getElementById('dispStep2Title').textContent = getText('step2Title');
+        document.getElementById('dispStep3Title').textContent = getText('step3Title');
+        document.getElementById('dispStep3Subnote').textContent = getText('step3Subnote');
+        
+        document.getElementById('dispTotalPayable').textContent = getText('totalPayable');
+        document.getElementById('dispWarnTitle').textContent = getText('warnTitle');
+        document.getElementById('dispWarnDesc').textContent = getText('warnDesc');
+        document.getElementById('dispUpiBanner').textContent = getText('upiBanner');
+        document.getElementById('dispCancelBtn').textContent = getText('cancelBtn');
+        document.getElementById('dispMaintenanceText').textContent = getText('maintenance');
+        
+        document.getElementById('dispNightTitle').textContent = getText('nightModeTitle');
+        document.getElementById('dispNightDesc').textContent = getText('nightModeDesc');
+
+        document.getElementById('dispSuccessTitle').textContent = getText('successTitle');
+        document.getElementById('dispFinalSuccessMsg').textContent = getText('finalSuccessMsg');
+        document.getElementById('dispReceiptTitle').textContent = getText('receiptTitle');
+        document.getElementById('dispLblPack').textContent = getText('lblPack');
+        document.getElementById('dispLblAmount').textContent = getText('lblAmount');
+        document.getElementById('dispLblUid').textContent = getText('lblUid');
+        document.getElementById('dispLblIgn').textContent = getText('lblIgn');
+        document.getElementById('dispLblTime').textContent = getText('lblTime');
+        document.getElementById('dispBtnNewOrder').textContent = getText('btnNewOrder');
+
+        document.getElementById('dispTagline').style.display = getTgl('showTagline') ? 'block' : 'none';
+        document.getElementById('pillSecure').style.display = getTgl('showSecureBadge') ? 'flex' : 'none';
+        document.getElementById('pillInstant').style.display = getTgl('showInstantBadge') ? 'flex' : 'none';
+        document.getElementById('pillSupport').style.display = getTgl('showSupportBadge') ? 'flex' : 'none';
+        document.getElementById('pillStats').style.display = getTgl('showOrdersToday') ? 'inline-block' : 'none';
+        
+        document.getElementById('dispStep1Title').style.display = getTgl('showStep1Title') ? 'block' : 'none';
+        document.getElementById('dispStep2Title').style.display = getTgl('showStep2Title') ? 'block' : 'none';
+        document.getElementById('dispStep3Title').style.display = getTgl('showStep3Title') ? 'block' : 'none';
+        document.getElementById('dispStep3Subnote').style.display = getTgl('showStep3Subnote') ? 'block' : 'none';
+        
+        document.getElementById('dispTotalPayable').style.display = getTgl('showTotalPayable') ? 'block' : 'none';
+        document.getElementById('highValueWarning').style.display = getTgl('showWarnBanner') ? (parseInt(selectedPack?.price || 0) > 2000 ? 'block' : 'none') : 'none';
+        document.getElementById('verificationStatus').style.display = getTgl('showAwaitingStatus') ? 'block' : 'none';
+        document.getElementById('dispUpiBanner').style.display = getTgl('showUpiBannerText') ? 'block' : 'none';
+        document.getElementById('dispCancelBtnWrap').style.display = getTgl('showCancelBtn') ? 'flex' : 'none';
+        
+        document.getElementById('dispSuccessTitle').style.display = getTgl('showSuccessTitle') ? 'block' : 'none';
+        document.getElementById('dispReceiptBox').style.display = getTgl('showReceipt') ? 'block' : 'none';
+
+        document.getElementById('partnerBlock').style.display = getTgl('showPartnerLogo') ? 'block' : 'none';
+        
+        const mode = window.siteConfig?.paymentMode || 'upi';
+        document.getElementById('dispUpiAppsBanner').style.display = (getTgl('showUpiApps') && mode === 'upi') ? 'block' : 'none';
+        
+        document.getElementById('footerKrafton').style.display = getTgl('showFooterKrafton') ? 'block' : 'none';
+        allowSocialProofPopup = getTgl('showSocialProof');
+
+        document.getElementById('linkTerms').style.display = window.siteConfig.policies.showTerms ? 'inline-block' : 'none';
+        document.getElementById('linkPrivacy').style.display = window.siteConfig.policies.showPrivacy ? 'inline-block' : 'none';
+        document.getElementById('linkRefund').style.display = window.siteConfig.policies.showRefund ? 'inline-block' : 'none';
+        document.getElementById('linkShipping').style.display = window.siteConfig.policies.showShipping ? 'inline-block' : 'none';
+        document.getElementById('linkContact').style.display = window.siteConfig.policies.showContact ? 'inline-block' : 'none';
+
+        document.getElementById('bodyTerms').innerHTML = window.siteConfig.policies.contentTerms || defaultAdminConfig.policies.contentTerms;
+        document.getElementById('bodyPrivacy').innerHTML = window.siteConfig.policies.contentPrivacy || defaultAdminConfig.policies.contentPrivacy;
+        document.getElementById('bodyRefund').innerHTML = window.siteConfig.policies.contentRefund || defaultAdminConfig.policies.contentRefund;
+        document.getElementById('bodyShipping').innerHTML = window.siteConfig.policies.contentShipping || defaultAdminConfig.policies.contentShipping;
+        document.getElementById('bodyContact').innerHTML = window.siteConfig.policies.contentContact || defaultAdminConfig.policies.contentContact;
+    };
+
+    window.injectDynamicStatusUI = function() {
+        const vStatus = document.getElementById('verificationStatus');
+        if(!vStatus || vStatus.style.background === "rgba(0, 255, 157, 0.1)") return; 
+        
+        const mode = window.siteConfig?.paymentMode || 'upi';
+        let descHtml = '';
+        if (mode === 'upi') {
+            descHtml = `${getText('awaitingDesc1')} <strong id="exactAmountText" style="color: var(--primary);">₹${exactPriceStr}</strong>.<br>
+            ${getText('awaitingDesc2')}`;
+        } else {
+            descHtml = `Please complete your payment securely.<br>
+            ${getText('awaitingDesc2')}`;
+        }
+
+        vStatus.style.background = "rgba(0, 224, 255, 0.05)";
+        vStatus.style.borderColor = "rgba(0, 224, 255, 0.2)";
+        vStatus.innerHTML = `
+            <i class="fas fa-circle-notch fa-spin" style="color: var(--accent); font-size: 28px; margin-bottom: 12px;"></i>
+            <div style="font-family: var(--font-display); font-weight: 700; color: #fff; font-size: 18px; letter-spacing: 1px;">${getText('awaitingTitle')}</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.4;">
+                ${descHtml}
+            </div>
+        `;
+    }
+
+    const bgm = document.getElementById('bgmAudio');
+    bgm.volume = 0.3; 
+    function initAudio() { if(bgm.paused) bgm.play().catch(e => console.log("Audio waiting for interaction")); }
+    document.body.addEventListener('click', initAudio, { once: true });
+    document.body.addEventListener('touchstart', initAudio, { once: true });
+    document.addEventListener("visibilitychange", function() { if (document.hidden) { bgm.pause(); } else { bgm.play().catch(e => console.log("Waiting")); } });
+
+    window.openModal = function(modalId) { document.getElementById(modalId).classList.add('active'); document.body.classList.add('modal-open'); }
+    window.closeModal = function(modalId) { document.getElementById(modalId).classList.remove('active'); document.body.classList.remove('modal-open'); }
+    window.closeModalOutside = function(event, modalId) { if (event.target.id === modalId) window.closeModal(modalId); }
+
+    // --- ADMIN LOGIC ---
+    let adminClickCount = 0;
+    let adminClickTimer;
+    window.handleLogoClick = function() {
+        adminClickCount++; clearTimeout(adminClickTimer); adminClickTimer = setTimeout(() => { adminClickCount = 0; }, 2000); 
+        if(adminClickCount === 5) { adminClickCount = 0; window.openModal('adminLoginModal'); }
+    }
+    window.verifyAdmin = function() {
+        const u = document.getElementById('adminUser').value.trim(); const p = document.getElementById('adminPass').value.trim();
+        const inputU = btoa(u); const inputP = btoa(p);
+        const validU = window.siteConfig.adminAuth?.u || defaultAdminConfig.adminAuth.u; const validP = window.siteConfig.adminAuth?.p || defaultAdminConfig.adminAuth.p;
+        if (inputU === validU && inputP === validP) {
+            document.getElementById('adminError').classList.remove('show'); window.closeModal('adminLoginModal');
+            document.getElementById('adminUser').value = ''; document.getElementById('adminPass').value = ''; openAdminPanel();
+        } else { document.getElementById('adminError').classList.add('show'); }
+    }
+
+    function openAdminPanel() {
+        const validU = window.siteConfig.adminAuth?.u || defaultAdminConfig.adminAuth.u;
+        document.getElementById('adminSetUser').placeholder = "Current: " + atob(validU); document.getElementById('adminSetUser').value = ""; document.getElementById('adminSetPass').value = "";
+        document.getElementById('adminPaymentMode').value = window.siteConfig.paymentMode || 'upi';
+        
+        document.getElementById('adminRazorpayApi').value = window.siteConfig.razorpayApiUrl || '';
+        document.getElementById('adminNightStart').value = window.siteConfig.shopTiming.startHour !== undefined ? window.siteConfig.shopTiming.startHour : 0;
+        document.getElementById('adminNightEnd').value = window.siteConfig.shopTiming.endHour !== undefined ? window.siteConfig.shopTiming.endHour : 9;
+        document.getElementById('adminTextTagline').value = getText('tagline'); document.getElementById('adminTextSecure').value = getText('secureBadge');
+        document.getElementById('adminTextInstant').value = getText('instantBadge'); document.getElementById('adminTextSupport').value = getText('supportBadge');
+        document.getElementById('adminTextOrders').value = getText('ordersToday'); document.getElementById('adminTextStep1').value = getText('step1Title');
+        document.getElementById('adminTextStep2').value = getText('step2Title'); document.getElementById('adminTextStep3').value = getText('step3Title');
+        document.getElementById('adminTextStep3Subnote').value = getText('step3Subnote'); document.getElementById('adminTextTotalPay').value = getText('totalPayable');
+        document.getElementById('adminTextWarnTitle').value = getText('warnTitle'); document.getElementById('adminTextWarnDesc').value = getText('warnDesc');
+        document.getElementById('adminTextAwaitTitle').value = getText('awaitingTitle'); document.getElementById('adminTextAwaitDesc1').value = getText('awaitingDesc1');
+        document.getElementById('adminTextAwaitDesc2').value = getText('awaitingDesc2'); document.getElementById('adminTextUpiBanner').value = getText('upiBanner');
+        document.getElementById('adminTextCancelBtn').value = getText('cancelBtn'); document.getElementById('adminTextMaintenance').value = getText('maintenance');
+        document.getElementById('adminTextNightTitle').value = getText('nightModeTitle'); document.getElementById('adminTextNightDesc').value = getText('nightModeDesc');
+        document.getElementById('adminTextSuccessTitle').value = getText('successTitle'); document.getElementById('adminTextFinalMsg').value = getText('finalSuccessMsg');
+        document.getElementById('adminTextReceiptTitle').value = getText('receiptTitle'); document.getElementById('adminTextLblPack').value = getText('lblPack');
+        document.getElementById('adminTextLblAmount').value = getText('lblAmount'); document.getElementById('adminTextLblUid').value = getText('lblUid');
+        document.getElementById('adminTextLblIgn').value = getText('lblIgn'); document.getElementById('adminTextLblTime').value = getText('lblTime');
+        document.getElementById('adminTextBtnNew').value = getText('btnNewOrder');
+
+        document.getElementById('tgl_tagline').checked = getTgl('showTagline'); document.getElementById('tgl_secureBadge').checked = getTgl('showSecureBadge');
+        document.getElementById('tgl_instantBadge').checked = getTgl('showInstantBadge'); document.getElementById('tgl_supportBadge').checked = getTgl('showSupportBadge');
+        document.getElementById('tgl_ordersToday').checked = getTgl('showOrdersToday'); document.getElementById('tgl_step1Title').checked = getTgl('showStep1Title');
+        document.getElementById('tgl_step2Title').checked = getTgl('showStep2Title'); document.getElementById('tgl_step3Title').checked = getTgl('showStep3Title');
+        document.getElementById('tgl_step3Subnote').checked = getTgl('showStep3Subnote'); document.getElementById('tgl_totalPayable').checked = getTgl('showTotalPayable');
+        document.getElementById('tgl_warnBanner').checked = getTgl('showWarnBanner'); document.getElementById('tgl_awaitingStatus').checked = getTgl('showAwaitingStatus');
+        document.getElementById('tgl_upiBannerText').checked = getTgl('showUpiBannerText'); document.getElementById('tgl_cancelBtn').checked = getTgl('showCancelBtn');
+        document.getElementById('tgl_successTitle').checked = getTgl('showSuccessTitle'); document.getElementById('tgl_showReceipt').checked = getTgl('showReceipt');
+        document.getElementById('tgl_enableNightMode').checked = getTgl('enableNightMode'); document.getElementById('adminShowLogo').checked = getTgl('showPartnerLogo');
+        document.getElementById('adminShowProof').checked = getTgl('showSocialProof'); document.getElementById('adminShowUpiIcons').checked = getTgl('showUpiApps');
+        document.getElementById('adminShowKrafton').checked = getTgl('showFooterKrafton');
+
+        document.getElementById('adminShowTerms').checked = window.siteConfig.policies.showTerms; document.getElementById('adminShowPrivacy').checked = window.siteConfig.policies.showPrivacy;
+        document.getElementById('adminShowRefund').checked = window.siteConfig.policies.showRefund; document.getElementById('adminShowShipping').checked = window.siteConfig.policies.showShipping;
+        document.getElementById('adminShowContact').checked = window.siteConfig.policies.showContact;
+        document.getElementById('adminContentTerms').value = window.siteConfig.policies.contentTerms || defaultAdminConfig.policies.contentTerms;
+        document.getElementById('adminContentPrivacy').value = window.siteConfig.policies.contentPrivacy || defaultAdminConfig.policies.contentPrivacy;
+        document.getElementById('adminContentRefund').value = window.siteConfig.policies.contentRefund || defaultAdminConfig.policies.contentRefund;
+        document.getElementById('adminContentShipping').value = window.siteConfig.policies.contentShipping || defaultAdminConfig.policies.contentShipping;
+        document.getElementById('adminContentContact').value = window.siteConfig.policies.contentContact || defaultAdminConfig.policies.contentContact;
+        
+        window.renderAdminUpiList(); window.renderAdminRzpLinksList(); window.renderAdminPacksList(); window.openModal('adminPanelModal');
+    }
+
+    // --- UPI List Render ---
+    window.renderAdminUpiList = function() {
+        if(!document.getElementById('adminUpiList')) return;
+        const upis = window.siteConfig.upiIds || [];
+        const renderList = upis.map((u, index) => `
+            <div class="admin-input-group" style="justify-content: space-between; background: rgba(0, 224, 255, 0.05); border: 1px solid rgba(0, 224, 255, 0.1);">
+                <div style="display: flex; align-items: center; gap: 10px; flex: 1; overflow: hidden;">
+                    <input type="checkbox" ${u.active ? 'checked' : ''} onchange="toggleUpiActive(${index})" style="width: 18px; height: 18px; accent-color: var(--primary); cursor:pointer; flex-shrink: 0;" title="Tick to active for load balancing">
+                    <span style="font-size: 13px; color: ${u.active ? '#fff' : '#666'}; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; font-weight: ${u.active ? 'bold' : 'normal'};" title="${u.id}">${u.id}</span>
+                </div>
+                <button class="btn" style="background:var(--error); padding: 8px; width: 40px; flex-shrink: 0;" onclick="removeUpi(${index})"><i class="fas fa-trash"></i></button>
+            </div>
+        `).join('');
+        
+        if(upis.length === 0) { document.getElementById('adminUpiList').innerHTML = `<div style="text-align:center; padding: 10px; color: var(--error); font-size: 12px; margin-bottom: 10px; border: 1px dashed var(--error); border-radius: var(--radius-sm);">No UPI IDs added. Maintenance mode is ON (If UPI is selected).</div>`;
+        } else { document.getElementById('adminUpiList').innerHTML = renderList; }
+    }
+
+    window.toggleUpiActive = function(index) { if(window.siteConfig.upiIds[index]) { window.siteConfig.upiIds[index].active = !window.siteConfig.upiIds[index].active; window.renderAdminUpiList(); } }
+    window.removeUpi = function(index) { window.siteConfig.upiIds.splice(index, 1); window.renderAdminUpiList(); }
+    window.addNewUpi = function() {
+        const val = document.getElementById('newUpiId').value.trim();
+        if(val) { if(!window.siteConfig.upiIds) window.siteConfig.upiIds = []; window.siteConfig.upiIds.push({id: val, active: true}); document.getElementById('newUpiId').value = ''; window.renderAdminUpiList();
+        } else { alert("Please enter a valid UPI ID"); }
+    }
+
+    // --- Razorpay Global Links List Render ---
+    window.renderAdminRzpLinksList = function() {
+        if(!document.getElementById('adminRzpLinkList')) return;
+        const links = window.siteConfig.razorpayLinks || [];
+        const renderList = links.map((l, index) => `
+            <div class="admin-input-group" style="justify-content: space-between; background: rgba(0, 224, 255, 0.05); border: 1px solid rgba(0, 224, 255, 0.1);">
+                <div style="display: flex; align-items: center; gap: 10px; flex: 1; overflow: hidden;">
+                    <span style="font-size: 13px; color: #fff; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" title="${l}">${l}</span>
+                </div>
+                <button class="btn" style="background:var(--error); padding: 8px; width: 40px; flex-shrink: 0;" onclick="removeRzpLink(${index})"><i class="fas fa-trash"></i></button>
+            </div>
+        `).join('');
+        
+        if(links.length === 0) { 
+            document.getElementById('adminRzpLinkList').innerHTML = `<div style="text-align:center; padding: 10px; color: #aaa; font-size: 12px; margin-bottom: 10px; border: 1px dashed #555; border-radius: var(--radius-sm);">No Global Razorpay Links added.</div>`;
+        } else { 
+            document.getElementById('adminRzpLinkList').innerHTML = renderList; 
+        }
+    }
+
+    window.removeRzpLink = function(index) { window.siteConfig.razorpayLinks.splice(index, 1); window.renderAdminRzpLinksList(); }
+    window.addNewRzpLink = function() {
+        const val = document.getElementById('newRzpLink').value.trim();
+        if(val) { 
+            if(!window.siteConfig.razorpayLinks) window.siteConfig.razorpayLinks = []; 
+            window.siteConfig.razorpayLinks.push(val); 
+            document.getElementById('newRzpLink').value = ''; 
+            window.renderAdminRzpLinksList();
+        } else { 
+            alert("Please enter a valid Razorpay link"); 
+        }
+    }
+
+
+    // --- Admin Packs Render with specific Razorpay Links UI ---
+    window.renderAdminPacksList = function() {
+        if(!document.getElementById('adminTrialPacksList')) return;
+        
+        const renderList = (packs, type) => packs.map((p, index) => `
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); padding: 10px; margin-bottom: 10px; border-radius: 8px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+                    <input type="number" class="form-input" value="${p.uc}" onchange="updatePack('${type}', ${index}, 'uc', this.value)" style="padding: 8px; font-size: 13px; width:40%;" placeholder="UC"> 
+                    <input type="number" class="form-input" value="${p.price}" onchange="updatePack('${type}', ${index}, 'price', this.value)" style="padding: 8px; font-size: 13px; width:40%;" placeholder="₹">
+                    <button class="btn" style="background:var(--error); padding: 8px; width: 20%;" onclick="removePack('${type}', ${index})"><i class="fas fa-trash"></i></button>
+                </div>
+                
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; margin-top: 10px;">
+                    <label style="font-size: 11px; color: #aaa; margin-bottom: 5px; display:block;">Specific Razorpay Links (Load Balanced)</label>
+                    
+                    <div style="margin-bottom: 8px;">
+                        ${(p.rzpLinks || []).map((link, lIndex) => `
+                            <div class="flex-row-center" style="margin-top: 4px; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px;">
+                                <span style="font-size: 11px; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; flex:1;" title="${link}">${link}</span>
+                                <button class="btn" style="background:var(--error); padding: 4px; width: 25px; flex-shrink: 0; min-height: 25px;" onclick="removePackRzpLink('${type}', ${index}, ${lIndex})">
+                                    <i class="fas fa-trash" style="font-size:10px;"></i>
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="flex-row-center">
+                        <input type="text" id="newPackLink-${type}-${index}" class="form-input" placeholder="Add pack specific link" style="padding: 8px; font-size: 11px; flex:1;">
+                        <button class="btn btn-primary" onclick="addPackRzpLink('${type}', ${index})" style="padding: 8px; width: 40px; flex-shrink: 0; min-height: 35px;">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+        document.getElementById('adminTrialPacksList').innerHTML = renderList(window.siteConfig.trialPacks || [], 'trialPacks');
+        document.getElementById('adminBulkPacksList').innerHTML = renderList(window.siteConfig.bulkPacks || [], 'bulkPacks');
+    }
+
+    window.addPackRzpLink = function(type, packIndex) {
+        const input = document.getElementById(`newPackLink-${type}-${packIndex}`);
+        const val = input.value.trim();
+        if(val) {
+            if(!window.siteConfig[type][packIndex].rzpLinks) window.siteConfig[type][packIndex].rzpLinks = [];
+            window.siteConfig[type][packIndex].rzpLinks.push(val);
+            input.value = '';
+            window.renderAdminPacksList();
+        } else {
+            alert("Please enter a valid link to add.");
+        }
+    };
+
+    window.removePackRzpLink = function(type, packIndex, linkIndex) {
+        window.siteConfig[type][packIndex].rzpLinks.splice(linkIndex, 1);
+        window.renderAdminPacksList();
+    };
+
+    window.updatePack = function(type, index, field, value) {
+        window.siteConfig[type][index][field] = parseInt(value) || 0;
+    }
+    
+    window.removePack = function(type, index) { window.siteConfig[type].splice(index, 1); window.renderAdminPacksList(); }
+    
+    window.addNewPack = function() {
+        const type = document.getElementById('newPackType').value === 'trial' ? 'trialPacks' : 'bulkPacks';
+        const uc = parseInt(document.getElementById('newPackUc').value); const price = parseInt(document.getElementById('newPackPrice').value);
+        if(uc && price) { 
+            window.siteConfig[type].push({uc, price, rzpLinks: []}); 
+            document.getElementById('newPackUc').value = ''; 
+            document.getElementById('newPackPrice').value = ''; 
+            window.renderAdminPacksList();
+        } else { 
+            alert("Please enter valid UC and Price"); 
+        }
+    }
+
+    window.saveAdminSettings = async function() {
+        const btn = document.getElementById('adminSaveBtn'); const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Live...'; btn.disabled = true;
+
+        const newU = document.getElementById('adminSetUser').value.trim(); const newP = document.getElementById('adminSetPass').value.trim();
+        if(newU && newP) { window.siteConfig.adminAuth = { u: btoa(newU), p: btoa(newP) }; }
+        
+        window.siteConfig.paymentMode = document.getElementById('adminPaymentMode').value;
+        window.siteConfig.razorpayApiUrl = document.getElementById('adminRazorpayApi').value.trim();
+        window.siteConfig.shopTiming.startHour = parseInt(document.getElementById('adminNightStart').value) || 0;
+        window.siteConfig.shopTiming.endHour = parseInt(document.getElementById('adminNightEnd').value) || 9;
+        
+        window.siteConfig.texts.tagline = document.getElementById('adminTextTagline').value.trim() || defaultAdminConfig.texts.tagline;
+        window.siteConfig.texts.secureBadge = document.getElementById('adminTextSecure').value.trim() || defaultAdminConfig.texts.secureBadge;
+        window.siteConfig.texts.instantBadge = document.getElementById('adminTextInstant').value.trim() || defaultAdminConfig.texts.instantBadge;
+        window.siteConfig.texts.supportBadge = document.getElementById('adminTextSupport').value.trim() || defaultAdminConfig.texts.supportBadge;
+        window.siteConfig.texts.ordersToday = document.getElementById('adminTextOrders').value.trim() || defaultAdminConfig.texts.ordersToday;
+        window.siteConfig.texts.step1Title = document.getElementById('adminTextStep1').value.trim() || defaultAdminConfig.texts.step1Title;
+        window.siteConfig.texts.step2Title = document.getElementById('adminTextStep2').value.trim() || defaultAdminConfig.texts.step2Title;
+        window.siteConfig.texts.step3Title = document.getElementById('adminTextStep3').value.trim() || defaultAdminConfig.texts.step3Title;
+        window.siteConfig.texts.step3Subnote = document.getElementById('adminTextStep3Subnote').value.trim() || defaultAdminConfig.texts.step3Subnote;
+        window.siteConfig.texts.totalPayable = document.getElementById('adminTextTotalPay').value.trim() || defaultAdminConfig.texts.totalPayable;
+        window.siteConfig.texts.warnTitle = document.getElementById('adminTextWarnTitle').value.trim() || defaultAdminConfig.texts.warnTitle;
+        window.siteConfig.texts.warnDesc = document.getElementById('adminTextWarnDesc').value.trim() || defaultAdminConfig.texts.warnDesc;
+        window.siteConfig.texts.awaitingTitle = document.getElementById('adminTextAwaitTitle').value.trim() || defaultAdminConfig.texts.awaitingTitle;
+        window.siteConfig.texts.awaitingDesc1 = document.getElementById('adminTextAwaitDesc1').value.trim() || defaultAdminConfig.texts.awaitingDesc1;
+        window.siteConfig.texts.awaitingDesc2 = document.getElementById('adminTextAwaitDesc2').value.trim() || defaultAdminConfig.texts.awaitingDesc2;
+        window.siteConfig.texts.upiBanner = document.getElementById('adminTextUpiBanner').value.trim() || defaultAdminConfig.texts.upiBanner;
+        window.siteConfig.texts.cancelBtn = document.getElementById('adminTextCancelBtn').value.trim() || defaultAdminConfig.texts.cancelBtn;
+        window.siteConfig.texts.maintenance = document.getElementById('adminTextMaintenance').value.trim() || defaultAdminConfig.texts.maintenance;
+        window.siteConfig.texts.nightModeTitle = document.getElementById('adminTextNightTitle').value.trim() || defaultAdminConfig.texts.nightModeTitle;
+        window.siteConfig.texts.nightModeDesc = document.getElementById('adminTextNightDesc').value.trim() || defaultAdminConfig.texts.nightModeDesc;
+        window.siteConfig.texts.successTitle = document.getElementById('adminTextSuccessTitle').value.trim() || defaultAdminConfig.texts.successTitle;
+        window.siteConfig.texts.finalSuccessMsg = document.getElementById('adminTextFinalMsg').value.trim() || defaultAdminConfig.texts.finalSuccessMsg;
+        window.siteConfig.texts.receiptTitle = document.getElementById('adminTextReceiptTitle').value.trim() || defaultAdminConfig.texts.receiptTitle;
+        window.siteConfig.texts.lblPack = document.getElementById('adminTextLblPack').value.trim() || defaultAdminConfig.texts.lblPack;
+        window.siteConfig.texts.lblAmount = document.getElementById('adminTextLblAmount').value.trim() || defaultAdminConfig.texts.lblAmount;
+        window.siteConfig.texts.lblUid = document.getElementById('adminTextLblUid').value.trim() || defaultAdminConfig.texts.lblUid;
+        window.siteConfig.texts.lblIgn = document.getElementById('adminTextLblIgn').value.trim() || defaultAdminConfig.texts.lblIgn;
+        window.siteConfig.texts.lblTime = document.getElementById('adminTextLblTime').value.trim() || defaultAdminConfig.texts.lblTime;
+        window.siteConfig.texts.btnNewOrder = document.getElementById('adminTextBtnNew').value.trim() || defaultAdminConfig.texts.btnNewOrder;
+
+        window.siteConfig.toggles.showTagline = document.getElementById('tgl_tagline').checked;
+        window.siteConfig.toggles.showSecureBadge = document.getElementById('tgl_secureBadge').checked;
+        window.siteConfig.toggles.showInstantBadge = document.getElementById('tgl_instantBadge').checked;
+        window.siteConfig.toggles.showSupportBadge = document.getElementById('tgl_supportBadge').checked;
+        window.siteConfig.toggles.showOrdersToday = document.getElementById('tgl_ordersToday').checked;
+        window.siteConfig.toggles.showStep1Title = document.getElementById('tgl_step1Title').checked;
+        window.siteConfig.toggles.showStep2Title = document.getElementById('tgl_step2Title').checked;
+        window.siteConfig.toggles.showStep3Title = document.getElementById('tgl_step3Title').checked;
+        window.siteConfig.toggles.showStep3Subnote = document.getElementById('tgl_step3Subnote').checked;
+        window.siteConfig.toggles.showTotalPayable = document.getElementById('tgl_totalPayable').checked;
+        window.siteConfig.toggles.showWarnBanner = document.getElementById('tgl_warnBanner').checked;
+        window.siteConfig.toggles.showAwaitingStatus = document.getElementById('tgl_awaitingStatus').checked;
+        window.siteConfig.toggles.showUpiBannerText = document.getElementById('tgl_upiBannerText').checked;
+        window.siteConfig.toggles.showCancelBtn = document.getElementById('tgl_cancelBtn').checked;
+        window.siteConfig.toggles.showSuccessTitle = document.getElementById('tgl_successTitle').checked;
+        window.siteConfig.toggles.showReceipt = document.getElementById('tgl_showReceipt').checked;
+        window.siteConfig.toggles.enableNightMode = document.getElementById('tgl_enableNightMode').checked;
+        window.siteConfig.toggles.showPartnerLogo = document.getElementById('adminShowLogo').checked;
+        window.siteConfig.toggles.showSocialProof = document.getElementById('adminShowProof').checked;
+        window.siteConfig.toggles.showUpiApps = document.getElementById('adminShowUpiIcons').checked;
+        window.siteConfig.toggles.showFooterKrafton = document.getElementById('adminShowKrafton').checked;
+        
+        window.siteConfig.policies.showTerms = document.getElementById('adminShowTerms').checked;
+        window.siteConfig.policies.showPrivacy = document.getElementById('adminShowPrivacy').checked;
+        window.siteConfig.policies.showRefund = document.getElementById('adminShowRefund').checked;
+        window.siteConfig.policies.showShipping = document.getElementById('adminShowShipping').checked;
+        window.siteConfig.policies.showContact = document.getElementById('adminShowContact').checked;
+        window.siteConfig.policies.contentTerms = document.getElementById('adminContentTerms').value.trim() || defaultAdminConfig.policies.contentTerms;
+        window.siteConfig.policies.contentPrivacy = document.getElementById('adminContentPrivacy').value.trim() || defaultAdminConfig.policies.contentPrivacy;
+        window.siteConfig.policies.contentRefund = document.getElementById('adminContentRefund').value.trim() || defaultAdminConfig.policies.contentRefund;
+        window.siteConfig.policies.contentShipping = document.getElementById('adminContentShipping').value.trim() || defaultAdminConfig.policies.contentShipping;
+        window.siteConfig.policies.contentContact = document.getElementById('adminContentContact').value.trim() || defaultAdminConfig.policies.contentContact;
+
+        localStorage.setItem('ucifyAdminConfig', JSON.stringify(window.siteConfig));
+
+        if(window.saveConfigToDB) {
+            const success = await window.saveConfigToDB(window.siteConfig);
+            if(success) { btn.innerHTML = 'Saved to Database! <i class="fas fa-check"></i>'; btn.style.background = 'var(--success)'; btn.style.color = '#000';
+            } else { btn.innerHTML = 'Saved Locally Only'; alert("Database save failed. Check console or make sure Firebase is configured."); }
+        } else { btn.innerHTML = 'Saved Locally'; }
+
+        setTimeout(() => {
+            btn.innerHTML = originalText; btn.style.background = 'var(--primary)'; btn.style.color = '#000'; btn.disabled = false;
+            window.closeModal('adminPanelModal'); window.applyUISettings(); window.injectDynamicStatusUI();
+            if (document.getElementById('step3').classList.contains('active')) {
+                document.getElementById('highValueWarning').style.display = getTgl('showWarnBanner') ? (parseInt(selectedPack?.price || 0) > 2000 ? 'block' : 'none') : 'none';
+            }
+        }, 1500);
+    }
+
+    window.renderSitePacks = function() {
+        const trialGrid = document.getElementById('trialPacksGrid'); const bulkGrid = document.getElementById('bulkPacksGrid');
+        if(!trialGrid || !bulkGrid) return;
+        trialGrid.innerHTML = ''; bulkGrid.innerHTML = '';
+        if(window.siteConfig.trialPacks) {
+            window.siteConfig.trialPacks.forEach(pack => {
+                trialGrid.innerHTML += `
+                  <div class="pack-card" data-uc="${pack.uc}" data-price="${pack.price}" data-rzplinks="${encodeURIComponent(JSON.stringify(pack.rzpLinks || []))}">
+                    <div class="pack-uc"><img src="uc-logo.webp" class="uc-icon" draggable="false"> ${pack.uc} UC</div>
+                    <div class="pack-price">₹${pack.price}</div>
+                  </div>`;
+            });
+        }
+        if(window.siteConfig.bulkPacks) {
+            window.siteConfig.bulkPacks.forEach(pack => {
+                bulkGrid.innerHTML += `
+                  <div class="pack-card" data-uc="${pack.uc}" data-price="${pack.price}" data-rzplinks="${encodeURIComponent(JSON.stringify(pack.rzpLinks || []))}">
+                    <div class="pack-uc"><img src="uc-logo.webp" class="uc-icon" draggable="false"> ${pack.uc} UC</div>
+                    <div class="pack-price">₹${pack.price}</div>
+                  </div>`;
+            });
+        }
+        attachPackListeners();
+    }
+
+    function attachPackListeners() {
+        document.querySelectorAll('.pack-card').forEach(card => {
+            card.addEventListener('click', function(){
+                if(this.classList.contains('purchased')) return; triggerHaptic('light');
+                document.querySelectorAll('.pack-card').forEach(c => { c.classList.remove('selected'); c.querySelector('.check-mark')?.remove(); });
+                this.classList.add('selected');
+                const checkMark = document.createElement('div'); checkMark.className = 'check-mark'; checkMark.innerHTML = '<i class="fa-solid fa-check"></i>';
+                this.appendChild(checkMark);
+                
+                selectedPack = { 
+                    uc: this.dataset.uc, 
+                    price: this.dataset.price, 
+                    rzpLinks: JSON.parse(decodeURIComponent(this.dataset.rzplinks)) 
+                };
+                document.getElementById('next2').disabled = false;
+            });
+        });
+    }
+
+    function initParticles(){
+      const container = document.getElementById('floatingParticles');
+      for(let i = 0; i < 15; i++){
+        const particle = document.createElement('div'); particle.className = 'particle'; particle.innerHTML = '✦';
+        particle.style.left = Math.random() * 100 + '%'; particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 5 + 's'; particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+        container.appendChild(particle);
+      }
+    }
+
+    function createConfetti(){
+      const colors = ['#FFB800', '#00E0FF', '#ffffff'];
+      for(let i = 0; i < 50; i++){
+        setTimeout(() => {
+          const confetti = document.createElement('div'); confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%'; confetti.style.top = '-10px'; confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          confetti.animate([ { transform: `translate(0,0) rotate(0deg)`, opacity: 1 }, { transform: `translate(${Math.random()*100 - 50}px, 100vh) rotate(720deg)`, opacity: 0 }
+          ], { duration: 2000 + Math.random() * 2000, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' });
+          document.body.appendChild(confetti); setTimeout(() => confetti.remove(), 4000);
+        }, i * 30);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initParticles(); window.applyUISettings(); window.renderSitePacks(); document.getElementById('next1').disabled = true;
+      setTimeout(hideInitialLoader, 2500);
+    });
+
+    const gamingNames = [ "亗『MÂFÎÂ亗", "TOXIC彡KD", "77・playzYT", "SK๛play๛Live", "千ムＩＲＹＹ", "IQōShāDøwW", "LÙÇÍFËR〆", "Mâhïmâ", "DEMØN丨DEEPAK", "亗CZxAnurag亗", "FRSTxZGOD", "FGxWONGPLAYzzz", "GÕD〤RÚSHÈR", "IGメABHAY", "MR々ŁEGENÐ", "VÌNNÍ乂PLAYZ", "KGF๛OP亗×", "ROYALツKUNAL20", "『RÁGNÁR』", "GLXY丨DANGER", "SHADOW๛RIVEN", "會DAKU父", "LEGEND丶OPP", "SAʀDAʀJi", "HAWK么HARSH", "ZMCxSHREY", "K4气KALAAKAR", "『AIMGOD』1", "T乛Rex乛RAVAN", "Ē・ＶＥＮＯＭ", "๛『Vëgêtå", "4A乛M丨SNOW", "٭ɞALPHAʚ٭", "im๛PANDA", "SGLxShivam", "乛GameīxīOM", "・Ｄ卄マＵＶ・", "『EPC』KRXSNA", "ＦｒＯｚｅＮ", "๛Ðʀʌɢo", "ＹＡＳＨīě", "ＳＨＵ及Ｈ", "XT个『Farhan』", "D£ATH๛SLAYER", "『LAKSHYÀ』", "中ツWARRIORYT", "Vns๛Rahul", "EQZxJOKERyt", "ReFLeXツVENOM", "冬ＧＡＢＢＡＲ" ];
+    function getSocialUcPacks() { const tPacks = window.siteConfig.trialPacks || []; const bPacks = window.siteConfig.bulkPacks || []; return [...tPacks, ...bPacks].map(p => p.uc + " UC"); }
+    function showSocialProof(){
+      if(!allowSocialProofPopup) return; const ucPacksList = getSocialUcPacks(); if(ucPacksList.length === 0) return;
+      const randomName = gamingNames[Math.floor(Math.random() * gamingNames.length)]; const randomUC = ucPacksList[Math.floor(Math.random() * ucPacksList.length)];
+      const el = document.getElementById('socialProof'); document.getElementById('socialAvatar').textContent = randomName[0];
+      document.getElementById('socialName').textContent = randomName; document.getElementById('socialUC').textContent = randomUC;
+      el.style.display = 'flex'; setTimeout(() => { el.style.display = 'none'; }, 5000);
+    }
+    setInterval(() => { if(Math.random() > 0.5) showSocialProof(); }, 10000);
+
+    function getIndiaHour(){ const date = new Date(); const hourStr = date.toLocaleString("en-US", {timeZone: "Asia/Kolkata", hour: "numeric", hour12: false}); return parseInt(hourStr); }
+    function animateLiveOrders(){
+      const el = document.getElementById('liveOrders'); let currentOrders = 1000 + Math.floor(Math.random() * 2001); el.textContent = currentOrders;
+      function updateCounter() { currentOrders += 1; el.textContent = currentOrders; let nextInterval = 15000 + Math.floor(Math.random() * 5001); setTimeout(updateCounter, nextInterval); }
+      setTimeout(updateCounter, 15000);
+    }
+    animateLiveOrders();
+
+    function startQRTimer(){
+      const display = document.getElementById('timerDisplay'); const timerEl = document.getElementById('qrTimer'); timerEl.style.display = 'block'; 
+      if(qrTimer) clearInterval(qrTimer); timerSeconds = 900;
+      qrTimer = setInterval(() => {
+        timerSeconds--; const mins = Math.floor(timerSeconds / 60); const secs = timerSeconds % 60;
+        display.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        if(timerSeconds <= 0){ clearInterval(qrTimer); display.textContent = 'Expired'; if(paymentVerificationInterval) clearInterval(paymentVerificationInterval); }
+      }, 1000);
+    }
+
+    function showToast(message){
+      const toast = document.getElementById('toast'); document.getElementById('toastText').textContent = message; toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    window.copyOrderId = function(){
+      const orderIdEl = document.getElementById('orderIdText');
+      navigator.clipboard.writeText(orderIdEl.textContent).then(() => { showToast('Order ID copied!'); triggerHaptic('success'); });
+    }
+
+    function triggerHaptic(type='light'){ if(!navigator.vibrate) return; const patterns = { light:[10], medium:[20], heavy:[30], success:[10,20,10] }; navigator.vibrate(patterns[type] || [10]); }
+    function generateOrderId(){ return `UCF-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random()*900)}`; }
+
+    function showStep(step){
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById(`step${step}`).classList.add('active'); currentStep = step; updateProgress();
+    }
+
+    function updateProgress(){
+      const steps = document.querySelectorAll('.progress-step');
+      steps.forEach((stepEl, idx) => { stepEl.classList.toggle('completed', idx < currentStep - 1); stepEl.classList.toggle('active', idx === currentStep - 1); });
+    }
+
+    const uidInput = document.getElementById('uid'); const ignInput = document.getElementById('ign'); const uidIcon = document.getElementById('uidIcon');
+    const ignIcon = document.getElementById('ignIcon'); const uidError = document.getElementById('uidError');
+
+    function checkStep1Validation() {
+        const uidVal = uidInput.value.replace(/\D/g, ''); const ignVal = ignInput.value.trim();
+        const isUidValid = uidVal.length >= 9 && uidVal.length <= 12; const isIgnValid = ignVal.length >= 2;
+        document.getElementById('next1').disabled = !(isUidValid && isIgnValid);
+    }
+
+    uidInput.addEventListener('input', function(){
+      this.value = this.value.replace(/\D/g, '').slice(0,12); const len = this.value.length; const isValid = len >= 9 && len <= 12;
+      if(isValid){ uidInput.style.borderColor = "var(--success)"; uidIcon.className = 'input-icon check fas fa-check-circle'; uidError.classList.remove('show'); triggerHaptic('light');
+      } else { uidInput.style.borderColor = ""; uidIcon.className = ''; } checkStep1Validation();
+    });
+
+    ignInput.addEventListener('input', function(){
+        const isValid = this.value.trim().length >= 2;
+        if(isValid){ ignInput.style.borderColor = "var(--success)"; ignIcon.className = 'input-icon check fas fa-check-circle'; triggerHaptic('light');
+        } else { ignInput.style.borderColor = ""; ignIcon.className = ''; } checkStep1Validation();
+    });
+
+    const HARDCODED_SHEET_URL = "https://script.google.com/macros/s/AKfycbxZmmaWlqrx9ydYVfO3XkZKh25Oxa_k0XiLNBPbEVEBOwZTlE2qPxF6OEoU-I9oJzLj/exec";
+    const HARDCODED_VERIFY_URL = "https://script.google.com/macros/s/AKfycbzX371w86D2MFAGkpbbpYEm5GIvuXeh9BextRnqSLfzBLENLAaIU07T0Cr0nTPNJutQxg/exec";
+    const HARDCODED_WEBHOOK_URL = "https://discord.com/api/webhooks/1516406944481542185/7zyh3P5Mj1tYUDmLQfFGEfTD2KLhE-t6hK4pJA6Kk_TxpbsEPi8QiJaWrcJFmMhWsgki";
+
+    async function fetchPurchasedPacks(uid) {
+        try { const response = await fetch(`${HARDCODED_SHEET_URL}?uid=${uid}&t=${Date.now()}`); const data = await response.json(); return data.purchased || [];
+        } catch (e) { console.error("UID Check Error:", e); return []; }
+    }
+
+    document.getElementById('next1').onclick = async () => {
+        const btn = document.getElementById('next1'); const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...'; btn.disabled = true;
+
+        currentUid = uidInput.value; currentIgn = ignInput.value;
+        document.getElementById('displayUid').textContent = currentUid; document.getElementById('displayIgn').textContent = currentIgn;
+
+        const purchasedPacks = await fetchPurchasedPacks(currentUid);
+        document.querySelectorAll('.pack-card').forEach(card => {
+            card.classList.remove('purchased', 'selected'); card.querySelector('.check-mark')?.remove();
+            if(purchasedPacks.includes(card.dataset.uc)){ card.classList.add('purchased'); }
+        });
+
+        const trialTitle = document.getElementById('trialPackTitle'); const trialGrid = document.getElementById('trialPacksGrid');
+        let trialPackVisible = false; document.querySelectorAll('#trialPacksGrid .pack-card').forEach(card => { if(!card.classList.contains('purchased')) trialPackVisible = true; });
+        const tPacksCount = window.siteConfig.trialPacks ? window.siteConfig.trialPacks.length : 0;
+        
+        if (!trialPackVisible && tPacksCount > 0) { if(trialTitle) trialTitle.style.display = 'none'; if(trialGrid) trialGrid.style.display = 'none';
+        } else { if(trialTitle) trialTitle.style.display = 'block'; if(trialGrid) trialGrid.style.display = 'grid'; }
+
+        btn.innerHTML = originalText; btn.disabled = false; showStep(2);
+    };
+
+    document.getElementById('backToDetails').onclick = () => showStep(1);
+
+    // --- LOCK WAIT UI LOGIC ---
+    window.cancelLockWait = function() {
+        if(lockWaitTimer) clearInterval(lockWaitTimer);
+        document.getElementById('lockUI').style.display = 'none';
+        showStep(2);
+    }
+    
+    window.checkLockAgain = function() {
+        if(lockWaitTimer) clearInterval(lockWaitTimer);
+        document.getElementById('lockUI').style.display = 'none';
+        document.getElementById('next2').click();
+    }
+
+    function showLockUI() {
+        document.getElementById('normalPaymentUI').style.display = 'none';
+        document.getElementById('maintenanceUI').style.display = 'none';
+        document.getElementById('dispCancelBtnWrap').style.display = 'none';
+        document.getElementById('lockUI').style.display = 'block';
+        
+        showStep(3);
+        
+        let waitTime = 120; // 2 minutes
+        const display = document.getElementById('lockUITimer');
+        if(lockWaitTimer) clearInterval(lockWaitTimer);
+        
+        lockWaitTimer = setInterval(() => {
+            waitTime--;
+            const mins = Math.floor(waitTime / 60); const secs = waitTime % 60;
+            display.textContent = `Retry in ${mins}:${secs.toString().padStart(2, '0')}`;
+            if(waitTime <= 0) { clearInterval(lockWaitTimer); display.textContent = "Ready to retry!"; }
+        }, 1000);
+    }
+
+    // --- SMART PAYMENT PROCESSING ---
+    document.getElementById('next2').onclick = async function() {
+      const mode = window.siteConfig.paymentMode || 'upi';
+      const btn = document.getElementById('next2');
+      const origText = btn.innerHTML;
+
+      if (mode === 'upi') {
+          let activeUpis = window.siteConfig.upiIds ? window.siteConfig.upiIds.filter(u => u.active) : [];
+          if (activeUpis.length === 0) {
+              document.getElementById('normalPaymentUI').style.display = 'none'; document.getElementById('maintenanceUI').style.display = 'block'; showStep(3); return; 
+          }
+      } 
+      
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+      btn.disabled = true;
+
+      let exactPrice = parseFloat(selectedPack.price);
+      let rzpTargetLink = "";
+
+      if (mode === 'upi') {
+          const randomDecimal = (Math.floor(Math.random() * 99) + 1) / 100; exactPrice += randomDecimal;
+          exactPriceStr = exactPrice.toFixed(2);
+      } else if (mode === 'razorpay') {
+          let rzpGlobalLinks = window.siteConfig.razorpayLinks || [];
+          let packSpecificLinks = selectedPack.rzpLinks || [];
+          
+          if (packSpecificLinks.length > 0) { 
+              // Pick random from pack specific links
+              rzpTargetLink = packSpecificLinks[Math.floor(Math.random() * packSpecificLinks.length)];
+          } else if (rzpGlobalLinks.length > 0) { 
+              // Fallback to random global link
+              rzpTargetLink = rzpGlobalLinks[Math.floor(Math.random() * rzpGlobalLinks.length)];
+          }
+          
+          exactPriceStr = exactPrice.toString();
+      }
+      
+      orderId = generateOrderId();
+      
+      // FIREBASE SMART LOCKING FOR RAZORPAY
+      if (mode === 'razorpay') {
+          if(typeof window.acquireLock === 'function') {
+              const lockAcquired = await window.acquireLock(exactPriceStr, orderId);
+              if(!lockAcquired) {
+                  btn.innerHTML = origText; btn.disabled = false;
+                  showLockUI(); return; // Stop process here
+              }
+          }
+      }
+      
+      document.getElementById('normalPaymentUI').style.display = 'block';
+      document.getElementById('maintenanceUI').style.display = 'none';
+      document.getElementById('dispCancelBtnWrap').style.display = getTgl('showCancelBtn') ? 'flex' : 'none';
+      document.getElementById('lockUI').style.display = 'none';
+      
+      const amountEl = document.getElementById('paymentAmount'); amountEl.textContent = '₹' + exactPriceStr;
+      window.injectDynamicStatusUI(); 
+      
+      const warningEl = document.getElementById('highValueWarning');
+      if (parseInt(selectedPack.price) > 2000) { warningEl.style.display = getTgl('showWarnBanner') ? 'block' : 'none';
+      } else { warningEl.style.display = 'none'; }
+        
+      if (mode === 'upi') {
+          document.getElementById('razorpayCard').style.display = 'none'; document.getElementById('upiCard').style.display = 'block';
+          document.getElementById('dispUpiAppsBanner').style.display = getTgl('showUpiApps') ? 'block' : 'none';
+          document.getElementById('dispStep3Subnote').textContent = getText('step3Subnote');
+
+          const qrImage = document.getElementById('staticQrImage'); const loader = document.getElementById('qrLoader');
+          qrImage.style.display = 'none'; loader.style.display = 'block';
+
+          let activeUpis = window.siteConfig.upiIds.filter(u => u.active);
+          const randomUpi = activeUpis[Math.floor(Math.random() * activeUpis.length)].id;
+          const upiString = `upi://pay?pa=${randomUpi}&pn=UCify%20Store&am=${exactPriceStr}&cu=INR`;
+          const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiString)}&margin=10`;
+          
+          qrImage.src = qrUrl;
+          qrImage.onload = function(){ loader.style.display = 'none'; qrImage.style.display = 'block'; startQRTimer(); startPaymentVerification(exactPriceStr, 'upi'); };
+          qrImage.onerror = function(){ loader.style.display = 'none'; console.log("Error loading QR code."); };
+      } 
+      else if (mode === 'razorpay') {
+          document.getElementById('upiCard').style.display = 'none'; document.getElementById('razorpayCard').style.display = 'block';
+          document.getElementById('dispUpiAppsBanner').style.display = 'none';
+          document.getElementById('dispStep3Subnote').textContent = "Complete your transaction securely";
+
+          document.getElementById('rzpExactAmountText').textContent = exactPriceStr;
+          
+          document.getElementById('rzpRedirectBtn').onclick = function() {
+              if (!rzpTargetLink) { alert("Error: Admin has not configured a Razorpay link for this pack or globally."); return; }
+              razorpayWindow = window.open(rzpTargetLink, '_blank');
+          };
+          
+          startPaymentVerification(exactPriceStr, 'razorpay');
+      }
+
+      btn.innerHTML = origText; btn.disabled = false;
+      showStep(3);
+    };
+
+    document.getElementById('back3').onclick = () => {
+      if(qrTimer) clearInterval(qrTimer);
+      if(paymentVerificationInterval) clearInterval(paymentVerificationInterval);
+      
+      // Release lock if going back from Razorpay
+      const mode = window.siteConfig.paymentMode || 'upi';
+      if(mode === 'razorpay' && typeof window.releaseLock === 'function') { window.releaseLock(exactPriceStr); }
+      
+      window.injectDynamicStatusUI(); showStep(2);
+    };
+
+    function startPaymentVerification(amountToCheck, mode = 'upi') {
+        if(paymentVerificationInterval) clearInterval(paymentVerificationInterval);
+        let verificationApiUrl = HARDCODED_VERIFY_URL; 
+        if (mode === 'razorpay') { verificationApiUrl = window.siteConfig.razorpayApiUrl; }
+        
+        paymentVerificationInterval = setInterval(async () => {
+            try {
+                const res = await fetch(`${verificationApiUrl}?amount=${amountToCheck}&t=${Date.now()}`);
+                const data = await res.json();
+                
+                if(data.verified) {
+                    clearInterval(paymentVerificationInterval);
+                    if(qrTimer) clearInterval(qrTimer);
+                    if (razorpayWindow && !razorpayWindow.closed) { razorpayWindow.close(); }
+                    
+                    // Release lock on success
+                    if(mode === 'razorpay' && typeof window.releaseLock === 'function') { window.releaseLock(exactPriceStr); }
+                    
+                    processSuccessfulPayment(mode);
+                }
+            } catch (err) { console.log("Polling payment status..."); }
+        }, 5000); 
+    }
+
+    async function processSuccessfulPayment(mode) {
+        const vStatus = document.getElementById('verificationStatus');
+        vStatus.style.background = "rgba(0, 255, 157, 0.1)"; vStatus.style.borderColor = "var(--success)";
+        vStatus.innerHTML = `
+            <i class="fas fa-check-circle" style="color: var(--success); font-size: 32px; margin-bottom: 12px; animation: popIn 0.5s ease;"></i>
+            <div style="font-family: var(--font-display); font-weight: 700; color: #fff; font-size: 18px;">Payment Auto-Verified!</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Processing your order...</div>
+        `;
+        triggerHaptic('success');
+        
+        setTimeout(async () => {
+            const time = new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' });
+            const messageContent = `✅ **AUTO-VERIFIED ORDER** ✅\n\n` +
+                                   `**Method:** ${mode === 'razorpay' ? 'Razorpay' : 'UPI QR'}\n` +
+                                   `**Order ID:** \`${orderId}\`\n` +
+                                   `**UID:** \`${currentUid}\`\n` +
+                                   `**IGN:** ${currentIgn}\n` +
+                                   `**Pack:** ${selectedPack.uc} UC\n` +
+                                   `**Exact Amount:** ₹${exactPriceStr}\n` +
+                                   `**Time:** ${time}`;
+            try {
+                await fetch(HARDCODED_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: messageContent }) }).catch(e => console.log("Webhook error", e));
+                try {
+                    const sheetData = { uid: currentUid, uc: selectedPack.uc };
+                    await fetch(HARDCODED_SHEET_URL, { method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify(sheetData) });
+                } catch(sheetErr) { console.error("Order Save Error:", sheetErr); }
+
+                document.getElementById('orderIdText').textContent = orderId; document.getElementById('receipt-pack').textContent = selectedPack.uc + " UC";
+                document.getElementById('receipt-amount').textContent = "₹" + exactPriceStr; document.getElementById('receipt-uid').textContent = currentUid;
+                document.getElementById('receipt-ign').textContent = currentIgn; document.getElementById('receipt-time').textContent = time;
+                  
+                showStep(4); localStorage.removeItem('bgmiTimerEnd');
+                
+                const currentHour = getIndiaHour();
+                const startH = window.siteConfig.shopTiming.startHour !== undefined ? window.siteConfig.shopTiming.startHour : 0;
+                const endH = window.siteConfig.shopTiming.endHour !== undefined ? window.siteConfig.shopTiming.endHour : 9;
+                
+                let isNightTime = false;
+                if (startH < endH) { isNightTime = (currentHour >= startH && currentHour < endH); } else { isNightTime = (currentHour >= startH || currentHour < endH); }
+
+                if (getTgl('enableNightMode') && isNightTime) {
+                    document.getElementById('gameLoaderWrap').style.display = 'none'; document.getElementById('dispFinalSuccessMsg').style.display = 'none'; document.getElementById('nightMessage').style.display = 'block';
+                } else {
+                    document.getElementById('gameLoaderWrap').style.display = 'block'; document.getElementById('nightMessage').style.display = 'none'; startDeliveryTimer();
+                }
+            } catch(err) { alert("Connection failed while finishing order."); console.error(err); }
+        }, 1500);
+    }
+
+    function startDeliveryTimer() {
+        const duration = 420; const timerText = document.getElementById('deliveryTimer'); const fillBar = document.getElementById('gameBarFill'); const msg = document.getElementById('deliveryMsg');
+        let endTime = localStorage.getItem('bgmiTimerEnd');
+        if (!endTime) { endTime = new Date().getTime() + (duration * 1000); localStorage.setItem('bgmiTimerEnd', endTime); }
+
+        const timerInterval = setInterval(() => {
+            const now = new Date().getTime(); const distance = endTime - now; let secondsLeft = Math.floor(distance / 1000);
+            if (distance < 0) {
+                clearInterval(timerInterval); fillBar.style.width = "100%"; msg.textContent = "Completed";
+                document.getElementById('gameLoaderWrap').style.display = 'none'; document.getElementById('dispFinalSuccessMsg').style.display = 'block';
+                localStorage.removeItem('bgmiTimerEnd'); createConfetti(); triggerHaptic('success'); return;
+            }
+            const m = Math.floor(secondsLeft / 60); const s = secondsLeft % 60; timerText.textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            const totalDuration = 420; const percentage = ((totalDuration - secondsLeft) / totalDuration) * 100; fillBar.style.width = percentage + "%";
+            
+            if(percentage < 20) msg.textContent = "Connecting to BGMI Servers..."; if(percentage >= 20 && percentage < 40) msg.textContent = "Connecting to BGMI Servers...";
+            if(percentage >= 40 && percentage < 60) msg.textContent = "Verifying UID & Player Name..."; if(percentage >= 60 && percentage < 80) msg.textContent = "Initiating UC Transfer...";
+            if(percentage >= 80 && percentage < 99) msg.textContent = "Finalizing Transaction...";
+        }, 1000);
+    }
+  </script>
+</body>
+</html>
