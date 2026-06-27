@@ -218,6 +218,9 @@
       border: 1px solid rgba(0, 224, 255, 0.2);
       padding: 6px 12px;
       border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .stat-number { color: var(--accent); font-weight: 800; font-family: var(--font-display); }
 
@@ -299,7 +302,6 @@
       font-family: var(--font-display);
       font-size: 26px;
       text-transform: uppercase;
-      margin-bottom: 5px;
       color: #fff; 
       background: linear-gradient(to right, #fff, #b0b0b0);
       -webkit-background-clip: text;
@@ -795,6 +797,10 @@
 
         <div class="partner-block" id="partnerBlock">
           <img src="bgmi-official.webp" alt="BGMI Official" class="official-logo" draggable="false">
+          <!-- Added Authorised Seller text here -->
+          <div style="color: var(--success); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">
+            BGMI Authorised Seller
+          </div>
         </div>
 
         <div class="trust-strip" id="dispTrustStrip">
@@ -804,8 +810,8 @@
         </div>
 
         <div class="live-stats" id="dispLiveStats">
-          <div class="stat-badge" id="pillStats">
-            <i class="fa-solid fa-earth-asia" style="color: var(--accent);"></i>
+          <div class="stat-badge" id="pillStats" style="display: flex; align-items: center; gap: 5px;">
+            <img src="uc-logo.webp" alt="UC" style="width: 14px; height: 14px; object-fit: contain;">
             <span id="liveOrders" class="stat-number">1425</span> <span id="dispOrdersToday">Orders Today</span>
           </div>
         </div>
@@ -826,8 +832,11 @@
     <!-- STEP 1: PLAYER DETAILS -->
     <div id="step1" class="step active">
       <div class="step-content">
-        <h2 class="step-title" id="dispStep1Title">Player Details</h2>
-        <p class="subnote">Enter player details to verify account.</p>
+        <!-- Added info icon next to Title -->
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 25px;">
+            <h2 class="step-title" id="dispStep1Title" style="margin-bottom: 0;">Player Details</h2>
+            <i class="fa-solid fa-circle-info info-icon" style="font-size: 18px; margin-left: 0;" onclick="openModal('playerDetailsModal')"></i>
+        </div>
 
         <div class="form-group">
           <label class="form-label">
@@ -1060,6 +1069,19 @@
   <div class="modal-overlay" id="contactModal" onclick="closeModalOutside(event, 'contactModal')"><div class="modal-box"><div class="modal-header"><h3>Contact Us</h3><button class="close-btn" onclick="closeModal('contactModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyContact"></div></div></div>
   
   <!-- NEW INFO MODALS -->
+  <div class="modal-overlay" id="playerDetailsModal" onclick="closeModalOutside(event, 'playerDetailsModal')">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 style="font-size: 18px;">How to Verify Account</h3>
+        <button class="close-btn" onclick="closeModal('playerDetailsModal')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p style="color: #ccc; font-size: 14px; margin-bottom: 15px; text-align: center;">Enter player details to verify account.</p>
+        <video src="bgmi-player-details-info.mp4" autoplay loop muted playsinline style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--surface-border); box-shadow: 0 4px 15px rgba(0,0,0,0.5);"></video>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="uidModal" onclick="closeModalOutside(event, 'uidModal')">
     <div class="modal-box">
       <div class="modal-header">
@@ -1661,7 +1683,7 @@
         document.getElementById('pillSecure').style.display = getTgl('showSecureBadge') ? 'flex' : 'none';
         document.getElementById('pillInstant').style.display = getTgl('showInstantBadge') ? 'flex' : 'none';
         document.getElementById('pillSupport').style.display = getTgl('showSupportBadge') ? 'flex' : 'none';
-        document.getElementById('pillStats').style.display = getTgl('showOrdersToday') ? 'inline-block' : 'none';
+        document.getElementById('pillStats').style.display = getTgl('showOrdersToday') ? 'flex' : 'none'; // Changed to flex for icon align
         
         document.getElementById('dispStep1Title').style.display = getTgl('showStep1Title') ? 'block' : 'none';
         document.getElementById('dispStep2Title').style.display = getTgl('showStep2Title') ? 'block' : 'none';
