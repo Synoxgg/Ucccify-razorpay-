@@ -316,7 +316,8 @@
     /* --- INPUT FIELDS --- */
     .form-group { margin-bottom: 20px; position: relative; }
     .form-label {
-      display: block;
+      display: flex;
+      align-items: center;
       font-size: 12px;
       font-weight: 600;
       text-transform: uppercase;
@@ -325,6 +326,19 @@
       letter-spacing: 1px;
     }
     
+    .info-icon {
+      color: var(--primary);
+      margin-left: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .info-icon:hover {
+      color: #fff;
+      transform: scale(1.1);
+    }
+
     .form-input-wrapper { position: relative; }
     
     .form-input {
@@ -813,10 +827,13 @@
     <div id="step1" class="step active">
       <div class="step-content">
         <h2 class="step-title" id="dispStep1Title">Player Details</h2>
-        <p class="subnote">Enter your BGMI ID to verify account</p>
+        <p class="subnote">Enter player details to verify account.</p>
 
         <div class="form-group">
-          <label class="form-label">BGMI Character ID (UID)</label>
+          <label class="form-label">
+            BGMI Character ID (UID)
+            <i class="fa-solid fa-circle-info info-icon" onclick="openModal('uidModal')"></i>
+          </label>
           <div class="form-input-wrapper">
             <input type="tel" class="form-input" id="uid" placeholder="" maxlength="12" inputmode="numeric">
             <i class="input-icon" id="uidIcon"></i>
@@ -825,7 +842,10 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">BGMI ID Name</label>
+          <label class="form-label">
+            BGMI ID Name
+            <i class="fa-solid fa-circle-info info-icon" onclick="openModal('nameModal')"></i>
+          </label>
           <div class="form-input-wrapper">
             <input type="text" class="form-input" id="ign" placeholder="" maxlength="20">
             <i class="input-icon" id="ignIcon"></i>
@@ -1038,6 +1058,41 @@
   <div class="modal-overlay" id="refundModal" onclick="closeModalOutside(event, 'refundModal')"><div class="modal-box"><div class="modal-header"><h3>Refund & Cancellation</h3><button class="close-btn" onclick="closeModal('refundModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyRefund"></div></div></div>
   <div class="modal-overlay" id="shippingModal" onclick="closeModalOutside(event, 'shippingModal')"><div class="modal-box"><div class="modal-header"><h3>Shipping & Delivery</h3><button class="close-btn" onclick="closeModal('shippingModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyShipping"></div></div></div>
   <div class="modal-overlay" id="contactModal" onclick="closeModalOutside(event, 'contactModal')"><div class="modal-box"><div class="modal-header"><h3>Contact Us</h3><button class="close-btn" onclick="closeModal('contactModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyContact"></div></div></div>
+  
+  <!-- NEW INFO MODALS -->
+  <div class="modal-overlay" id="uidModal" onclick="closeModalOutside(event, 'uidModal')">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 style="font-size: 18px;">How To Find Your User ID (UID) in BGMI</h3>
+        <button class="close-btn" onclick="closeModal('uidModal')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <img src="uid-ss.webp" alt="UID Screenshot" style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--surface-border); margin-bottom: 15px;">
+        <ul style="padding-left: 20px; color: #ccc; font-size: 14px; line-height: 1.6;">
+          <li style="margin-bottom: 8px;">Open BGMI and wait until it is fully loaded.</li>
+          <li style="margin-bottom: 8px;">Tap on the Profile Icon.</li>
+          <li style="margin-bottom: 8px;">When you go to the profile section, you will find BGMI User ID (UID)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="nameModal" onclick="closeModalOutside(event, 'nameModal')">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 style="font-size: 18px;">How To Find Your BGMI ID name in BGMI</h3>
+        <button class="close-btn" onclick="closeModal('nameModal')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <img src="bgminame-ss.webp" alt="Name Screenshot" style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--surface-border); margin-bottom: 15px;">
+        <ul style="padding-left: 20px; color: #ccc; font-size: 14px; line-height: 1.6;">
+          <li style="margin-bottom: 8px;">Open BGMI and wait until it is fully loaded.</li>
+          <li style="margin-bottom: 8px;">Tap on the Profile Icon.</li>
+          <li style="margin-bottom: 8px;">When you go to the profile section, you will find BGMI ID name.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   <!-- ADMIN MODALS -->
   <div class="modal-overlay" id="adminLoginModal" onclick="closeModalOutside(event, 'adminLoginModal')">
