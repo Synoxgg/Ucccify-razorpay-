@@ -809,10 +809,12 @@
           <div class="trust-pill" id="pillSupport"><i class="fa-solid fa-headset"></i> <span id="dispSupportBadge">24/7</span></div>
         </div>
 
+        <!-- REARRANGED STATS BADGE HERE -->
         <div class="live-stats" id="dispLiveStats">
           <div class="stat-badge" id="pillStats" style="display: flex; align-items: center; gap: 5px;">
+            <span id="liveOrders" class="stat-number">1425</span> 
             <img src="uc-logo.webp" alt="UC" style="width: 14px; height: 14px; object-fit: contain;">
-            <span id="liveOrders" class="stat-number">1425</span> <span id="dispOrdersToday">Orders Today</span>
+            <span id="dispOrdersToday">Packs Delivered Today</span>
           </div>
         </div>
       </div>
@@ -1077,7 +1079,8 @@
       </div>
       <div class="modal-body">
         <p style="color: #ccc; font-size: 14px; margin-bottom: 15px; text-align: center;">Enter player details to verify account.</p>
-        <video src="bgmi-player-details-info.mp4" autoplay loop muted playsinline style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--surface-border); box-shadow: 0 4px 15px rgba(0,0,0,0.5);"></video>
+        <!-- Added background: #000 and object-fit: contain to prevent blurred paddings from the browser -->
+        <video src="bgmi-player-details-info.mp4" autoplay loop muted playsinline style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--surface-border); box-shadow: 0 4px 15px rgba(0,0,0,0.5); background-color: #000; object-fit: contain;"></video>
       </div>
     </div>
   </div>
@@ -1201,7 +1204,7 @@
               <div class="flex-row-center"><input type="checkbox" id="tgl_secureBadge" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextSecure" placeholder="Secure" style="font-size:12px; padding:8px;"></div>
               <div class="flex-row-center"><input type="checkbox" id="tgl_instantBadge" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextInstant" placeholder="Instant" style="font-size:12px; padding:8px;"></div>
               <div class="flex-row-center"><input type="checkbox" id="tgl_supportBadge" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextSupport" placeholder="24/7" style="font-size:12px; padding:8px;"></div>
-              <div class="flex-row-center"><input type="checkbox" id="tgl_ordersToday" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextOrders" placeholder="Orders Today" style="font-size:12px; padding:8px;"></div>
+              <div class="flex-row-center"><input type="checkbox" id="tgl_ordersToday" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextOrders" placeholder="Packs Delivered Today" style="font-size:12px; padding:8px;"></div>
           </div>
 
           <div class="admin-subsection">
@@ -1478,6 +1481,11 @@
 
                     if(!dbConfig.paymentMode) dbConfig.paymentMode = "upi";
                     
+                    // Force migrate older default text for consistency
+                    if(dbConfig.texts.ordersToday === "Orders Today" || dbConfig.texts.ordersToday === "Packs Delivered") {
+                        dbConfig.texts.ordersToday = "Packs Delivered Today";
+                    }
+
                     if(dbConfig.razorpayLinks === undefined) dbConfig.razorpayLinks = [];
                     // Migrate older single link to multiple array format
                     if(dbConfig.razorpayLink && dbConfig.razorpayLinks.length === 0) {
@@ -1541,7 +1549,7 @@
             secureBadge: "Secure",
             instantBadge: "Instant",
             supportBadge: "24/7",
-            ordersToday: "Orders Today",
+            ordersToday: "Packs Delivered Today", // Updated text here
             step1Title: "Player Details",
             step2Title: "Select BGMI UC Packs",
             step3Title: "Payment",
@@ -1593,6 +1601,11 @@
 
     window.siteConfig = JSON.parse(localStorage.getItem('ucifyAdminConfig')) || defaultAdminConfig;
     
+    // Auto-migrate "Orders Today" to "Packs Delivered Today" if they had the old default saved
+    if (window.siteConfig.texts && (window.siteConfig.texts.ordersToday === "Orders Today" || window.siteConfig.texts.ordersToday === "Packs Delivered")) {
+        window.siteConfig.texts.ordersToday = "Packs Delivered Today";
+    }
+
     if(window.siteConfig.upiId && !window.siteConfig.upiIds) {
         window.siteConfig.upiIds = [{ id: window.siteConfig.upiId, active: true }];
         delete window.siteConfig.upiId;
@@ -1752,9 +1765,31 @@
     document.body.addEventListener('touchstart', initAudio, { once: true });
     document.addEventListener("visibilitychange", function() { if (document.hidden) { bgm.pause(); } else { bgm.play().catch(e => console.log("Waiting")); } });
 
-    window.openModal = function(modalId) { document.getElementById(modalId).classList.add('active'); document.body.classList.add('modal-open'); }
-    window.closeModal = function(modalId) { document.getElementById(modalId).classList.remove('active'); document.body.classList.remove('modal-open'); }
-    window.closeModalOutside = function(event, modalId) { if (event.target.id === modalId) window.closeModal(modalId); }
+    // Modals Opening/Closing Logic (Updated to auto-play and pause specific video elements)
+    window.openModal = function(modalId) { 
+        document.getElementById(modalId).classList.add('active'); 
+        document.body.classList.add('modal-open'); 
+        const vid = document.querySelector(`#${modalId} video`);
+        if (vid) {
+            vid.currentTime = 0;
+            vid.play().catch(e => console.log(e));
+        }
+    }
+    
+    window.closeModal = function(modalId) { 
+        document.getElementById(modalId).classList.remove('active'); 
+        document.body.classList.remove('modal-open'); 
+        const vid = document.querySelector(`#${modalId} video`);
+        if (vid) {
+            vid.pause();
+        }
+    }
+    
+    window.closeModalOutside = function(event, modalId) { 
+        if (event.target.id === modalId) {
+            window.closeModal(modalId);
+        }
+    }
 
     // --- ADMIN LOGIC ---
     let adminClickCount = 0;
