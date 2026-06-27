@@ -527,13 +527,6 @@
       border: 1px solid var(--surface-border);
       margin: 15px 0;
     }
-    
-    .qr-timer {
-      color: var(--error);
-      font-family: var(--font-display);
-      font-weight: 600;
-      margin: 10px 0;
-    }
 
     /* Verification Box Styles */
     .auto-verify-box {
@@ -740,7 +733,7 @@
     }
 
     /* Admin specific CSS additions */
-    #newPackType option, #adminPaymentMode option { background-color: var(--bg-dark); color: #fff; }
+    #newPackType option { background-color: var(--bg-dark); color: #fff; }
     .admin-input-group { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; background: rgba(255,255,255,0.05); padding: 10px; border-radius: var(--radius-sm); }
     .admin-section-title { margin-top: 25px; margin-bottom: 12px; font-size: 15px; color: var(--primary); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
     .admin-subsection { margin-bottom: 15px; border-left: 2px solid var(--surface-border); padding-left: 10px; }
@@ -899,7 +892,7 @@
           <div id="lockUI" class="lock-ui-box">
              <i class="fas fa-user-clock" style="font-size: 34px; color: var(--primary); margin-bottom: 12px;"></i>
              <h3 style="color: #fff; font-family: var(--font-display); margin-bottom: 8px; font-size: 22px;">System Busy</h3>
-             <p style="font-size: 13px; color: #ccc; margin-bottom: 15px; line-height: 1.4;">Another user is currently completing a payment for this specific pack. To prevent transaction mix-ups, please wait or use the instant UPI option.</p>
+             <p style="font-size: 13px; color: #ccc; margin-bottom: 15px; line-height: 1.4;">Another user is currently completing a payment for this specific pack. To prevent transaction mix-ups, please wait.</p>
              <div class="lock-timer-text" id="lockUITimer">02:00</div>
              <div class="btn-row" style="margin-top: 15px;">
                 <button class="btn btn-secondary" style="padding: 12px; font-size: 13px;" onclick="cancelLockWait()">Cancel</button>
@@ -928,15 +921,13 @@
                   Clicking "Pay Now" will securely open the payment page.<br>
                   <strong style="color:var(--primary);">Amount (₹<span id="rzpExactAmountText"></span>) will be auto-filled.</strong>
                </div>
-               <div class="qr-timer" id="qrTimer" style="display:none;">
-                <i class="fa-regular fa-clock"></i> <span id="timerDisplay">02:00</span>
-               </div>
             </div>
 
             <!-- Automated Verification UI Container -->
             <div id="verificationStatus" class="auto-verify-box">
                 <!-- Inner HTML is injected dynamically via JS using siteConfig -->
             </div>
+
           </div>
         </div>
 
@@ -1021,6 +1012,7 @@
       </div>
       <div class="modal-body">
         <p style="color: #ccc; font-size: 14px; margin-bottom: 15px; text-align: center;">Enter player details to verify account.</p>
+        <!-- Added background: #000 and object-fit: contain to prevent blurred paddings from the browser -->
         <video src="bgmi-player-details-info.mp4" autoplay loop muted playsinline style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--surface-border); box-shadow: 0 4px 15px rgba(0,0,0,0.5); background-color: #000; object-fit: contain;"></video>
       </div>
     </div>
@@ -1104,10 +1096,10 @@
               </div>
           </div>
 
-          <!-- PAYMENT MODE SETTINGS -->
-          <h4 class="admin-section-title">⚖️ Payment Links</h4>
-          <p style="font-size: 11px; color: #aaa; margin-bottom: 10px;">Configure your Razorpay links here.</p>
-          <div class="admin-subsection" style="border-left: 2px solid #3399cc;">
+          <!-- PAYMENT MODE SETTINGS (RAZORPAY ONLY) -->
+          <h4 class="admin-section-title">⚖️ Payment Setup</h4>
+          <p style="font-size: 11px; color: #aaa; margin-bottom: 10px;">Configure your Razorpay settings below.</p>
+          <div class="admin-subsection" style="border-left: 2px solid #3399cc;">              
               <div id="adminRazorpayFields">
                   <label style="font-size:11px; color:#aaa; margin-bottom: 5px; display: block;">Razorpay Global / Base Links (For load balancing)</label>
                   <div id="adminRzpLinkList"></div>
@@ -1401,9 +1393,6 @@
                     if(!dbConfig.shopTiming) dbConfig.shopTiming = window.siteConfig.shopTiming || defaultAdminConfig.shopTiming;
                     if(!dbConfig.adminAuth) dbConfig.adminAuth = window.siteConfig.adminAuth || defaultAdminConfig.adminAuth;
 
-                    // Hardcode paymentMode to Razorpay
-                    dbConfig.paymentMode = "razorpay";
-                    
                     // Force migrate older default text for consistency
                     if(dbConfig.texts.ordersToday === "Orders Today" || dbConfig.texts.ordersToday === "Packs Delivered") {
                         dbConfig.texts.ordersToday = "Packs Delivered Today";
@@ -1433,7 +1422,6 @@
                     migratePacks(dbConfig.bulkPacks);
 
                     window.siteConfig = dbConfig;
-                    window.siteConfig.paymentMode = "razorpay";
                     
                     if(typeof window.applyUISettings === 'function') window.applyUISettings();
                     if(typeof window.renderSitePacks === 'function') window.renderSitePacks();
@@ -1462,7 +1450,6 @@
     // --- ADMIN SYSTEM VARIABLES ---
     const defaultAdminConfig = {
         adminAuth: { u: "c3lub3g=", p: "bW9vbnRhZ2U=" },
-        paymentMode: "razorpay", 
         razorpayLinks: [],
         razorpayApiUrl: "", 
         shopTiming: { startHour: 0, endHour: 9 },
@@ -1471,11 +1458,11 @@
             secureBadge: "Secure",
             instantBadge: "Instant",
             supportBadge: "24/7",
-            ordersToday: "Packs Delivered Today", // Updated text here
+            ordersToday: "Packs Delivered Today", 
             step1Title: "Player Details",
             step2Title: "Select BGMI UC Packs",
             step3Title: "Payment",
-            step3Subnote: "Complete your transaction securely",
+            step3Subnote: "Scan & pay using any UPI app",
             totalPayable: "TOTAL PAYABLE (EXACT)",
             warnTitle: "Limit Warning:",
             warnDesc: "Personal UPI limits often fail for amounts over ₹2000.",
@@ -1509,7 +1496,7 @@
             showPrivacy: true, contentPrivacy: "<h4>1. Information We Collect</h4><p>We collect your BGMI Player ID (UID) and In-Game Name (IGN) solely for the purpose of delivering the digital product. We process payments securely and do not store financial data.</p><h4>2. How We Use Your Data</h4><p>Your data is used strictly for order fulfillment, customer support, and transaction verification.</p><h4>3. Data Sharing</h4><p>We do not sell, trade, or rent user data to third parties. Information is only shared with our payment provider as required to process your transaction.</p>",
             showRefund: true, contentRefund: "<h4>1. Digital Goods Policy</h4><p>Because the products we sell are strictly digital in-game currency, <strong>all sales are final</strong>. Once the UC is successfully transferred to the provided UID, no refunds or cancellations can be processed.</p><h4>2. Failed Transactions</h4><p>If your payment is deducted but the order fails on our end, a full refund will be automatically initiated to your original payment method within 5-7 business days.</p><h4>3. Incorrect UID</h4><p>We are not responsible for UC sent to an incorrect UID provided by the user. No refunds will be issued in such cases.</p>",
             showShipping: true, contentShipping: "<h4>1. Delivery Method</h4><p>All deliveries are purely digital. No physical product will be shipped to your address.</p><h4>2. Delivery Time</h4><p>UC is typically credited to your account instantly or within 10-15 minutes. In case of server delays, please allow up to 24 hours for the transaction to reflect in your BGMI account.</p>",
-            showContact: true, contentContact: "<h4>Get in Touch</h4><p>If you face any issues with your order, please contact our support team. Have your Order ID and Transaction ID ready.</p><ul><li><strong>Business Name:</strong> UCIFY (INDIA) PRIVATE LIMITED</li><li><strong>Email Support:</strong> ucify.support@gmail.com</li><li><strong>Registered Address:</strong> HD-445, WeWork DLF Two Horizon Centre, 5th Floor, DLF Phase 5, Sector 43, Golf Course Road, Gurugram, Haryana 122002</li><li><strong>Business Address:</strong> 04A131, WeWork DLF Two Horizon Centre, 4th Floor, DLF Phase 5, Sector 43, Golf Course Road, Gurugram, Haryana 122002</li></ul>"
+            showContact: true, contentContact: "<h4>Get in Touch</h4><p>If you face any issues with your order, please contact our support team. Have your Order ID and Transaction ID ready.</p><ul><li><strong>Business Name:</strong> Krafton Inc</li><li><strong>Email Support:</strong> ucify.support@gmail.com</li><li><strong>Registered Address:</strong> HD-445, WeWork DLF Two Horizon Centre, 5th Floor, DLF Phase 5, Sector 43, Golf Course Road, Gurugram, Haryana 122002</li><li><strong>Business Address:</strong> 04A131, WeWork DLF Two Horizon Centre, 4th Floor, DLF Phase 5, Sector 43, Golf Course Road, Gurugram, Haryana 122002</li></ul>"
         },
         trialPacks: [ { uc: 13, price: 5, rzpLinks: [] } ],
         bulkPacks: [
@@ -1521,7 +1508,6 @@
     };
 
     window.siteConfig = JSON.parse(localStorage.getItem('ucifyAdminConfig')) || defaultAdminConfig;
-    window.siteConfig.paymentMode = "razorpay";
     
     // Auto-migrate "Orders Today" to "Packs Delivered Today" if they had the old default saved
     if (window.siteConfig.texts && (window.siteConfig.texts.ordersToday === "Orders Today" || window.siteConfig.texts.ordersToday === "Packs Delivered")) {
@@ -1648,8 +1634,7 @@
         const vStatus = document.getElementById('verificationStatus');
         if(!vStatus || vStatus.style.background === "rgba(0, 255, 157, 0.1)") return; 
         
-        let descHtml = `Please complete your payment securely.<br>
-            ${getText('awaitingDesc2')}`;
+        let descHtml = `Please complete your payment securely.<br>${getText('awaitingDesc2')}`;
 
         vStatus.style.background = "rgba(0, 224, 255, 0.05)";
         vStatus.style.borderColor = "rgba(0, 224, 255, 0.2)";
@@ -1726,7 +1711,7 @@
         document.getElementById('adminTextStep3Subnote').value = getText('step3Subnote'); document.getElementById('adminTextTotalPay').value = getText('totalPayable');
         document.getElementById('adminTextWarnTitle').value = getText('warnTitle'); document.getElementById('adminTextWarnDesc').value = getText('warnDesc');
         document.getElementById('adminTextAwaitTitle').value = getText('awaitingTitle'); document.getElementById('adminTextAwaitDesc1').value = getText('awaitingDesc1');
-        document.getElementById('adminTextAwaitDesc2').value = getText('awaitingDesc2');
+        document.getElementById('adminTextAwaitDesc2').value = getText('awaitingDesc2'); 
         document.getElementById('adminTextCancelBtn').value = getText('cancelBtn'); document.getElementById('adminTextMaintenance').value = getText('maintenance');
         document.getElementById('adminTextNightTitle').value = getText('nightModeTitle'); document.getElementById('adminTextNightDesc').value = getText('nightModeDesc');
         document.getElementById('adminTextSuccessTitle').value = getText('successTitle'); document.getElementById('adminTextFinalMsg').value = getText('finalSuccessMsg');
@@ -1791,6 +1776,7 @@
             alert("Please enter a valid Razorpay link"); 
         }
     }
+
 
     // --- Admin Packs Render with specific Razorpay Links UI ---
     window.renderAdminPacksList = function() {
@@ -1876,7 +1862,6 @@
         const newU = document.getElementById('adminSetUser').value.trim(); const newP = document.getElementById('adminSetPass').value.trim();
         if(newU && newP) { window.siteConfig.adminAuth = { u: btoa(newU), p: btoa(newP) }; }
         
-        window.siteConfig.paymentMode = "razorpay";
         window.siteConfig.razorpayApiUrl = document.getElementById('adminRazorpayApi').value.trim();
         window.siteConfig.shopTiming.startHour = parseInt(document.getElementById('adminNightStart').value) || 0;
         window.siteConfig.shopTiming.endHour = parseInt(document.getElementById('adminNightEnd').value) || 9;
@@ -2049,25 +2034,15 @@
     }
     animateLiveOrders();
 
-    function startQRTimer(mode = 'razorpay'){
-      const display = document.getElementById('timerDisplay');
-      const timerEl = document.getElementById('qrTimer');
-      timerEl.style.display = 'block'; 
-
+    function startQRTimer(){
       if(qrTimer) clearInterval(qrTimer);
       timerSeconds = 120; // 2 minutes auto redirect
       
       qrTimer = setInterval(() => {
         timerSeconds--;
-        const mins = Math.floor(timerSeconds / 60); const secs = timerSeconds % 60;
-        
-        display.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
-        
         if(timerSeconds <= 0){
             clearInterval(qrTimer);
-            display.textContent = 'Expired';
             if(paymentVerificationInterval) clearInterval(paymentVerificationInterval);
-            
             // Programmatically go back without toast message
             document.getElementById('back3').click();
         }
@@ -2197,7 +2172,6 @@
 
     // --- SMART PAYMENT PROCESSING ---
     document.getElementById('next2').onclick = async function() {
-      const mode = 'razorpay'; // Hardcoded to Razorpay
       const btn = document.getElementById('next2');
       const origText = btn.innerHTML;
 
@@ -2252,8 +2226,8 @@
           razorpayWindow = window.open(rzpTargetLink, '_blank');
       };
       
-      startQRTimer('razorpay');
-      startPaymentVerification(exactPriceStr, 'razorpay');
+      startQRTimer();
+      startPaymentVerification(exactPriceStr);
 
       btn.innerHTML = origText; btn.disabled = false;
       showStep(3);
@@ -2269,9 +2243,9 @@
       window.injectDynamicStatusUI(); showStep(2);
     };
 
-    function startPaymentVerification(amountToCheck, mode = 'razorpay') {
+    function startPaymentVerification(amountToCheck) {
         if(paymentVerificationInterval) clearInterval(paymentVerificationInterval);
-        let verificationApiUrl = window.siteConfig.razorpayApiUrl || HARDCODED_VERIFY_URL; 
+        let verificationApiUrl = window.siteConfig.razorpayApiUrl;
         
         paymentVerificationInterval = setInterval(async () => {
             try {
@@ -2286,13 +2260,13 @@
                     // Release lock on success
                     if(typeof window.releaseLock === 'function') { window.releaseLock(exactPriceStr); }
                     
-                    processSuccessfulPayment(mode);
+                    processSuccessfulPayment();
                 }
             } catch (err) { console.log("Polling payment status..."); }
         }, 5000); 
     }
 
-    async function processSuccessfulPayment(mode) {
+    async function processSuccessfulPayment() {
         const vStatus = document.getElementById('verificationStatus');
         vStatus.style.background = "rgba(0, 255, 157, 0.1)"; vStatus.style.borderColor = "var(--success)";
         vStatus.innerHTML = `
