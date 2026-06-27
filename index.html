@@ -910,7 +910,7 @@
               </div>
               
               <div class="qr-timer" id="qrTimer" style="display:none;">
-                <i class="fa-regular fa-clock"></i> <span id="timerDisplay">15:00</span>
+                <i class="fa-regular fa-clock"></i> <span id="timerDisplay">02:00</span>
               </div>
             </div>
 
@@ -1561,7 +1561,7 @@
     let razorpayWindow = null; 
     let qrTimer = null;
     let paymentVerificationInterval = null;
-    let timerSeconds = 900;
+    let timerSeconds = 120;
     let lockWaitTimer = null;
     let currentUid = "";
     let currentIgn = "";
@@ -2064,13 +2064,29 @@
     }
     animateLiveOrders();
 
-    function startQRTimer(){
-      const display = document.getElementById('timerDisplay'); const timerEl = document.getElementById('qrTimer'); timerEl.style.display = 'block'; 
-      if(qrTimer) clearInterval(qrTimer); timerSeconds = 900;
+    function startQRTimer(mode = 'upi'){
+      const display = document.getElementById('timerDisplay');
+      const timerEl = document.getElementById('qrTimer');
+      if (mode === 'upi') timerEl.style.display = 'block'; 
+
+      if(qrTimer) clearInterval(qrTimer);
+      timerSeconds = 120; // 2 minutes auto redirect
+      
       qrTimer = setInterval(() => {
-        timerSeconds--; const mins = Math.floor(timerSeconds / 60); const secs = timerSeconds % 60;
-        display.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
-        if(timerSeconds <= 0){ clearInterval(qrTimer); display.textContent = 'Expired'; if(paymentVerificationInterval) clearInterval(paymentVerificationInterval); }
+        timerSeconds--;
+        const mins = Math.floor(timerSeconds / 60); const secs = timerSeconds % 60;
+        
+        if (mode === 'upi') display.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        
+        if(timerSeconds <= 0){
+            clearInterval(qrTimer);
+            if(mode === 'upi') display.textContent = 'Expired';
+            if(paymentVerificationInterval) clearInterval(paymentVerificationInterval);
+            
+            // Programmatically go back and show toast
+            document.getElementById('back3').click();
+            showToast('Time expired! Please select pack again.');
+        }
       }, 1000);
     }
 
@@ -2135,9 +2151,19 @@
         document.getElementById('displayUid').textContent = currentUid; document.getElementById('displayIgn').textContent = currentIgn;
 
         const purchasedPacks = await fetchPurchasedPacks(currentUid);
+        
+        // Trial pack check logic - mark ALL trial packs if ANY trial pack was purchased
+        const trialUcValues = (window.siteConfig.trialPacks || []).map(p => p.uc.toString());
+        const hasPurchasedAnyTrial = purchasedPacks.some(uc => trialUcValues.includes(uc.toString()));
+
         document.querySelectorAll('.pack-card').forEach(card => {
             card.classList.remove('purchased', 'selected'); card.querySelector('.check-mark')?.remove();
-            if(purchasedPacks.includes(card.dataset.uc)){ card.classList.add('purchased'); }
+            
+            const isTrialPack = trialUcValues.includes(card.dataset.uc.toString());
+            
+            if ((isTrialPack && hasPurchasedAnyTrial) || purchasedPacks.includes(card.dataset.uc)) {
+                card.classList.add('purchased');
+            }
         });
 
         const trialTitle = document.getElementById('trialPackTitle'); const trialGrid = document.getElementById('trialPacksGrid');
@@ -2261,7 +2287,7 @@
           const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiString)}&margin=10`;
           
           qrImage.src = qrUrl;
-          qrImage.onload = function(){ loader.style.display = 'none'; qrImage.style.display = 'block'; startQRTimer(); startPaymentVerification(exactPriceStr, 'upi'); };
+          qrImage.onload = function(){ loader.style.display = 'none'; qrImage.style.display = 'block'; startQRTimer('upi'); startPaymentVerification(exactPriceStr, 'upi'); };
           qrImage.onerror = function(){ loader.style.display = 'none'; console.log("Error loading QR code."); };
       } 
       else if (mode === 'razorpay') {
@@ -2276,6 +2302,7 @@
               razorpayWindow = window.open(rzpTargetLink, '_blank');
           };
           
+          startQRTimer('razorpay');
           startPaymentVerification(exactPriceStr, 'razorpay');
       }
 
