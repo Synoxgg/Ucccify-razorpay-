@@ -1267,7 +1267,10 @@
           </div>
           
           <hr style="border-color: #333; margin: 30px 0 20px;">
-          <button type="button" class="btn btn-primary" id="adminSaveBtn" onclick="saveAdminSettings()">Save All Changes</button>
+          <div style="display: flex; gap: 10px;">
+             <button type="button" class="btn btn-secondary" id="adminResetBtn" onclick="resetAdminSettings()" style="flex: 1; border-color: var(--error); color: var(--error); font-size: 13px;"><i class="fas fa-undo"></i> Reset Default</button>
+             <button type="button" class="btn btn-primary" id="adminSaveBtn" onclick="saveAdminSettings()" style="flex: 2;">Save All Changes</button>
+          </div>
        </div>
     </div>
   </div>
@@ -1853,6 +1856,45 @@
         } else { 
             alert("Please enter valid UC and Price"); 
         }
+    }
+
+    // --- RESET TO DEFAULT SETTINGS LOGIC ---
+    window.resetAdminSettings = async function() {
+        if (!confirm("Are you sure you want to reset ALL settings to default? \nThis will completely wipe your current links, packs, text changes, and restore the default Admin Password.")) {
+            return;
+        }
+
+        const btn = document.getElementById('adminResetBtn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Resetting...';
+        btn.disabled = true;
+
+        // Deep copy the default config to completely reset the state
+        window.siteConfig = JSON.parse(JSON.stringify(defaultAdminConfig));
+
+        // Save locally
+        localStorage.setItem('ucifyAdminConfig', JSON.stringify(window.siteConfig));
+
+        // Save to Database
+        if (window.saveConfigToDB) {
+            const success = await window.saveConfigToDB(window.siteConfig);
+            if (!success) {
+                alert("Database reset failed. Check console or make sure Firebase is configured. Only local data was reset.");
+            }
+        }
+
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            
+            // Re-render everything with defaults
+            openAdminPanel(); 
+            window.applyUISettings(); 
+            window.renderSitePacks(); 
+            window.injectDynamicStatusUI();
+            
+            alert("Settings have been successfully reset to default.");
+        }, 1000);
     }
 
     window.saveAdminSettings = async function() {
