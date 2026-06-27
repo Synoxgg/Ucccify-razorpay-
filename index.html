@@ -2083,9 +2083,8 @@
             if(mode === 'upi') display.textContent = 'Expired';
             if(paymentVerificationInterval) clearInterval(paymentVerificationInterval);
             
-            // Programmatically go back and show toast
+            // Programmatically go back without toast message
             document.getElementById('back3').click();
-            showToast('Time expired! Please select pack again.');
         }
       }, 1000);
     }
