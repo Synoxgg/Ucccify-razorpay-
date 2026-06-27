@@ -797,6 +797,7 @@
 
         <div class="partner-block" id="partnerBlock">
           <img src="bgmi-official.webp" alt="BGMI Official" class="official-logo" draggable="false">
+          <!-- Added Authorised Seller text here -->
           <div style="color: var(--success); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">
             BGMI Authorised Seller
           </div>
@@ -811,7 +812,7 @@
         <div class="live-stats" id="dispLiveStats">
           <div class="stat-badge" id="pillStats" style="display: flex; align-items: center; gap: 5px;">
             <img src="uc-logo.webp" alt="UC" style="width: 14px; height: 14px; object-fit: contain;">
-            <span id="liveOrders" class="stat-number">1425</span> <span id="dispOrdersToday">Packs Delivered</span>
+            <span id="liveOrders" class="stat-number">1425</span> <span id="dispOrdersToday">Orders Today</span>
           </div>
         </div>
       </div>
@@ -831,6 +832,7 @@
     <!-- STEP 1: PLAYER DETAILS -->
     <div id="step1" class="step active">
       <div class="step-content">
+        <!-- Added info icon next to Title -->
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 25px;">
             <h2 class="step-title" id="dispStep1Title" style="margin-bottom: 0;">Player Details</h2>
             <i class="fa-solid fa-circle-info info-icon" style="font-size: 18px; margin-left: 0;" onclick="openModal('playerDetailsModal')"></i>
@@ -1075,7 +1077,7 @@
       </div>
       <div class="modal-body">
         <p style="color: #ccc; font-size: 14px; margin-bottom: 15px; text-align: center;">Enter player details to verify account.</p>
-        <video id="playerDetailsVideo" src="bgmi-player-details-info.mp4" loop muted playsinline style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--surface-border); box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: block; background: #000;"></video>
+        <video src="bgmi-player-details-info.mp4" autoplay loop muted playsinline style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--surface-border); box-shadow: 0 4px 15px rgba(0,0,0,0.5);"></video>
       </div>
     </div>
   </div>
@@ -1539,7 +1541,7 @@
             secureBadge: "Secure",
             instantBadge: "Instant",
             supportBadge: "24/7",
-            ordersToday: "Packs Delivered", // Updated text here
+            ordersToday: "Orders Today",
             step1Title: "Player Details",
             step2Title: "Select BGMI UC Packs",
             step3Title: "Payment",
@@ -1681,7 +1683,7 @@
         document.getElementById('pillSecure').style.display = getTgl('showSecureBadge') ? 'flex' : 'none';
         document.getElementById('pillInstant').style.display = getTgl('showInstantBadge') ? 'flex' : 'none';
         document.getElementById('pillSupport').style.display = getTgl('showSupportBadge') ? 'flex' : 'none';
-        document.getElementById('pillStats').style.display = getTgl('showOrdersToday') ? 'flex' : 'none'; 
+        document.getElementById('pillStats').style.display = getTgl('showOrdersToday') ? 'flex' : 'none'; // Changed to flex for icon align
         
         document.getElementById('dispStep1Title').style.display = getTgl('showStep1Title') ? 'block' : 'none';
         document.getElementById('dispStep2Title').style.display = getTgl('showStep2Title') ? 'block' : 'none';
@@ -1750,33 +1752,9 @@
     document.body.addEventListener('touchstart', initAudio, { once: true });
     document.addEventListener("visibilitychange", function() { if (document.hidden) { bgm.pause(); } else { bgm.play().catch(e => console.log("Waiting")); } });
 
-    // JS Updated for Video handling inside Modals
-    window.openModal = function(modalId) { 
-        document.getElementById(modalId).classList.add('active'); 
-        document.body.classList.add('modal-open'); 
-        if (modalId === 'playerDetailsModal') {
-            const vid = document.getElementById('playerDetailsVideo');
-            if (vid) {
-                vid.currentTime = 0;
-                vid.play().catch(e => console.log(e));
-            }
-        }
-    }
-    
-    window.closeModal = function(modalId) { 
-        document.getElementById(modalId).classList.remove('active'); 
-        document.body.classList.remove('modal-open'); 
-        if (modalId === 'playerDetailsModal') {
-            const vid = document.getElementById('playerDetailsVideo');
-            if (vid) {
-                vid.pause();
-            }
-        }
-    }
-    
-    window.closeModalOutside = function(event, modalId) { 
-        if (event.target.id === modalId) window.closeModal(modalId); 
-    }
+    window.openModal = function(modalId) { document.getElementById(modalId).classList.add('active'); document.body.classList.add('modal-open'); }
+    window.closeModal = function(modalId) { document.getElementById(modalId).classList.remove('active'); document.body.classList.remove('modal-open'); }
+    window.closeModalOutside = function(event, modalId) { if (event.target.id === modalId) window.closeModal(modalId); }
 
     // --- ADMIN LOGIC ---
     let adminClickCount = 0;
