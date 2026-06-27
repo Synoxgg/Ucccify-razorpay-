@@ -528,21 +528,6 @@
       margin: 15px 0;
     }
     
-    .qr-box {
-      width: 200px;
-      height: 200px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 10px;
-      border-radius: 10px;
-    }
-    
-    .qr-skeleton {
-      width: 100%; height: 100%;
-      background: #222;
-      animation: pulse 1.5s infinite;
-    }
-
     .qr-timer {
       color: var(--error);
       font-family: var(--font-display);
@@ -933,18 +918,6 @@
                <i class="fa-solid fa-triangle-exclamation"></i> <strong id="dispWarnTitle">Limit Warning:</strong> <span id="dispWarnDesc">Personal UPI limits often fail for amounts over ₹2000.</span>
             </div>
 
-            <!-- UPI QR CODE CARD -->
-            <div class="qr-card" id="upiCard">
-              <div class="qr-box">
-                 <div id="qrLoader" class="qr-skeleton"></div>
-                 <img id="staticQrImage" src="" alt="Scan QR" style="width:100%; height:100%; object-fit:contain; display:none; pointer-events: auto;" draggable="false">
-              </div>
-              
-              <div class="qr-timer" id="qrTimer" style="display:none;">
-                <i class="fa-regular fa-clock"></i> <span id="timerDisplay">02:00</span>
-              </div>
-            </div>
-
             <!-- RAZORPAY CARD -->
             <div class="qr-card" id="razorpayCard" style="display:none; text-align:center; padding: 30px 20px;">
                <div style="color:#fff; font-weight:700; font-size: 18px; margin-bottom:15px;">Secure Payment</div>
@@ -955,45 +928,14 @@
                   Clicking "Pay Now" will securely open the payment page.<br>
                   <strong style="color:var(--primary);">Amount (₹<span id="rzpExactAmountText"></span>) will be auto-filled.</strong>
                </div>
+               <div class="qr-timer" id="qrTimer" style="display:none;">
+                <i class="fa-regular fa-clock"></i> <span id="timerDisplay">02:00</span>
+               </div>
             </div>
 
             <!-- Automated Verification UI Container -->
             <div id="verificationStatus" class="auto-verify-box">
                 <!-- Inner HTML is injected dynamically via JS using siteConfig -->
-            </div>
-
-            <!-- Supported UPI Apps -->
-            <div id="dispUpiAppsBanner" class="upi-apps-container" style="margin-top: 20px; text-align: center;">
-                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;" id="dispUpiBanner">Scan & Pay From Any UPI App</div>
-                <div style="display: flex; justify-content: center; gap: 8px; align-items: center; flex-wrap: wrap;">
-                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; color: #fff; display: flex; align-items: center; justify-content: center; height: 34px;">
-                        <i class="fab fa-google-pay" style="font-size: 28px;"></i>
-                    </div>
-                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 700; font-size: 12px; color: #5f259f; display: flex; align-items: center; justify-content: center; height: 34px;">
-                        PhonePe
-                    </div>
-                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 800; font-size: 13px; color: #00baf2; display: flex; align-items: center; justify-content: center; height: 34px; font-style: italic;">
-                        Paytm
-                    </div>
-                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; color: #fff; display: flex; align-items: center; justify-content: center; height: 34px;">
-                        <i class="fab fa-amazon-pay" style="font-size: 24px;"></i>
-                    </div>
-                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 700; font-size: 12px; color: #ff7d00; display: flex; align-items: center; justify-content: center; height: 34px;">
-                        BHIM
-                    </div>
-                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 600; font-size: 13px; color: #25D366; display: flex; align-items: center; justify-content: center; height: 34px; gap: 5px;">
-                        <i class="fab fa-whatsapp" style="font-size: 16px;"></i> Pay
-                    </div>
-                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 800; font-size: 11px; color: #fff; display: flex; align-items: center; justify-content: center; height: 34px; letter-spacing: 1px;">
-                        CRED
-                    </div>
-                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 700; font-size: 12px; color: #ffad00; display: flex; align-items: center; justify-content: center; height: 34px;">
-                        FamPay
-                    </div>
-                    <div style="background: var(--bg-panel); border: 1px solid var(--surface-border); padding: 0 12px; border-radius: 6px; font-weight: 700; font-size: 12px; color: #0052cc; display: flex; align-items: center; justify-content: center; height: 34px;">
-                        MobiKwik
-                    </div>
-                </div>
             </div>
           </div>
         </div>
@@ -1052,13 +994,13 @@
   <!-- SITE FOOTER -->
   <div class="site-footer">
     <div class="footer-managed" id="footerKrafton">
-      Managed by <strong>Krafton Inc.</strong>
+      © 2026 UCify. All Rights Reserved
     </div>
     <div class="footer-links">
       <a id="linkTerms" onclick="openModal('termsModal')">Terms & Conditions</a>
       <a id="linkPrivacy" onclick="openModal('privacyModal')">Privacy Policy</a>
       <a id="linkRefund" onclick="openModal('refundModal')">Refund & Cancellation</a>
-      <a id="linkShipping" onclick="openModal('shippingModal')">Shipping Policy</a>
+      <a id="linkShipping" onclick="openModal('shippingModal')">Delivery Policy</a>
       <a id="linkContact" onclick="openModal('contactModal')">Contact Us</a>
     </div>
   </div>
@@ -1067,7 +1009,7 @@
   <div class="modal-overlay" id="termsModal" onclick="closeModalOutside(event, 'termsModal')"><div class="modal-box"><div class="modal-header"><h3>Terms & Conditions</h3><button class="close-btn" onclick="closeModal('termsModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyTerms"></div></div></div>
   <div class="modal-overlay" id="privacyModal" onclick="closeModalOutside(event, 'privacyModal')"><div class="modal-box"><div class="modal-header"><h3>Privacy Policy</h3><button class="close-btn" onclick="closeModal('privacyModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyPrivacy"></div></div></div>
   <div class="modal-overlay" id="refundModal" onclick="closeModalOutside(event, 'refundModal')"><div class="modal-box"><div class="modal-header"><h3>Refund & Cancellation</h3><button class="close-btn" onclick="closeModal('refundModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyRefund"></div></div></div>
-  <div class="modal-overlay" id="shippingModal" onclick="closeModalOutside(event, 'shippingModal')"><div class="modal-box"><div class="modal-header"><h3>Shipping & Delivery</h3><button class="close-btn" onclick="closeModal('shippingModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyShipping"></div></div></div>
+  <div class="modal-overlay" id="shippingModal" onclick="closeModalOutside(event, 'shippingModal')"><div class="modal-box"><div class="modal-header"><h3>Delivery Policy</h3><button class="close-btn" onclick="closeModal('shippingModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyShipping"></div></div></div>
   <div class="modal-overlay" id="contactModal" onclick="closeModalOutside(event, 'contactModal')"><div class="modal-box"><div class="modal-header"><h3>Contact Us</h3><button class="close-btn" onclick="closeModal('contactModal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="bodyContact"></div></div></div>
   
   <!-- NEW INFO MODALS -->
@@ -1079,7 +1021,6 @@
       </div>
       <div class="modal-body">
         <p style="color: #ccc; font-size: 14px; margin-bottom: 15px; text-align: center;">Enter player details to verify account.</p>
-        <!-- Added background: #000 and object-fit: contain to prevent blurred paddings from the browser -->
         <video src="bgmi-player-details-info.mp4" autoplay loop muted playsinline style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--surface-border); box-shadow: 0 4px 15px rgba(0,0,0,0.5); background-color: #000; object-fit: contain;"></video>
       </div>
     </div>
@@ -1164,15 +1105,10 @@
           </div>
 
           <!-- PAYMENT MODE SETTINGS -->
-          <h4 class="admin-section-title">⚖️ Payment Mode</h4>
-          <p style="font-size: 11px; color: #aaa; margin-bottom: 10px;">Choose your active payment method (UPI vs Razorpay).</p>
+          <h4 class="admin-section-title">⚖️ Payment Links</h4>
+          <p style="font-size: 11px; color: #aaa; margin-bottom: 10px;">Configure your Razorpay links here.</p>
           <div class="admin-subsection" style="border-left: 2px solid #3399cc;">
-              <select id="adminPaymentMode" class="form-input" style="padding: 10px; margin-bottom: 10px;">
-                  <option value="upi">UPI (Dynamic QR)</option>
-                  <option value="razorpay">Razorpay (Link Redirect)</option>
-              </select>
-              
-              <div id="adminRazorpayFields" style="margin-top: 15px;">
+              <div id="adminRazorpayFields">
                   <label style="font-size:11px; color:#aaa; margin-bottom: 5px; display: block;">Razorpay Global / Base Links (For load balancing)</label>
                   <div id="adminRzpLinkList"></div>
                   <div class="admin-input-group">
@@ -1183,15 +1119,6 @@
                   <label style="font-size:11px; color:#aaa; margin-bottom: 5px; display: block; margin-top: 15px;">Razorpay Webhook Google Sheet App URL</label>
                   <input type="text" id="adminRazorpayApi" class="form-input" placeholder="https://script.google.com/macros/s/.../exec" style="font-size:12px; padding:10px;">
               </div>
-          </div>
-
-          <!-- UPI Settings -->
-          <h4 class="admin-section-title">💳 UPI QR Setup (If UPI Selected)</h4>
-          <p style="font-size: 11px; color: #aaa; margin-bottom: 10px;">Add active UPI IDs. If list is empty and UPI mode is on, maintenance mode will turn on.</p>
-          <div id="adminUpiList"></div>
-          <div class="admin-input-group">
-             <input type="text" id="newUpiId" class="form-input" placeholder="Enter UPI ID (e.g. name@bank)" style="padding: 10px; width: 70%;">
-             <button class="btn btn-primary" onclick="addNewUpi()" style="padding: 10px; width: 30%;"><i class="fas fa-plus"></i> Add</button>
           </div>
 
           <!-- Dynamic Text Editing with Toggles -->
@@ -1232,7 +1159,6 @@
                  </div>
               </div>
 
-              <div class="flex-row-center"><input type="checkbox" id="tgl_upiBannerText" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextUpiBanner" placeholder="Scan & Pay From Any UPI App" style="font-size:12px; padding:8px;"></div>
               <div class="flex-row-center"><input type="checkbox" id="tgl_cancelBtn" class="admin-toggle-box"><input type="text" class="form-input" id="adminTextCancelBtn" placeholder="Cancel / Go Back Button" style="font-size:12px; padding:8px;"></div>
           </div>
 
@@ -1298,12 +1224,8 @@
                  <label for="adminShowProof" style="color: #fff; font-size: 13px; cursor: pointer;">Show Fake Social Proof Popup (Bottom Left)</label>
              </div>
              <div style="display: flex; align-items: center; gap: 10px;">
-                 <input type="checkbox" id="adminShowUpiIcons" style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
-                 <label for="adminShowUpiIcons" style="color: #fff; font-size: 13px; cursor: pointer;">Show Supported UPI App Logos Banner (Payment Page)</label>
-             </div>
-             <div style="display: flex; align-items: center; gap: 10px;">
                  <input type="checkbox" id="adminShowKrafton" style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
-                 <label for="adminShowKrafton" style="color: #fff; font-size: 13px; cursor: pointer;">Show 'Managed by Krafton Inc.' (Footer)</label>
+                 <label for="adminShowKrafton" style="color: #fff; font-size: 13px; cursor: pointer;">Show '© 2026 UCify. All Rights Reserved' (Footer)</label>
              </div>
           </div>
 
@@ -1324,7 +1246,7 @@
              <textarea class="form-input" id="adminContentRefund" rows="3" style="font-size:12px; padding:10px; line-height: 1.4; resize: vertical;"></textarea>
           </div>
           <div class="form-group" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: var(--radius-sm);">
-             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;"><input type="checkbox" id="adminShowShipping" class="admin-toggle-box"><label for="adminShowShipping" style="color: #fff; font-size: 13px; font-weight: bold; cursor: pointer;">Show Shipping Policy</label></div>
+             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;"><input type="checkbox" id="adminShowShipping" class="admin-toggle-box"><label for="adminShowShipping" style="color: #fff; font-size: 13px; font-weight: bold; cursor: pointer;">Show Delivery Policy</label></div>
              <textarea class="form-input" id="adminContentShipping" rows="3" style="font-size:12px; padding:10px; line-height: 1.4; resize: vertical;"></textarea>
           </div>
           <div class="form-group" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: var(--radius-sm);">
@@ -1479,7 +1401,8 @@
                     if(!dbConfig.shopTiming) dbConfig.shopTiming = window.siteConfig.shopTiming || defaultAdminConfig.shopTiming;
                     if(!dbConfig.adminAuth) dbConfig.adminAuth = window.siteConfig.adminAuth || defaultAdminConfig.adminAuth;
 
-                    if(!dbConfig.paymentMode) dbConfig.paymentMode = "upi";
+                    // Hardcode paymentMode to Razorpay
+                    dbConfig.paymentMode = "razorpay";
                     
                     // Force migrate older default text for consistency
                     if(dbConfig.texts.ordersToday === "Orders Today" || dbConfig.texts.ordersToday === "Packs Delivered") {
@@ -1510,11 +1433,11 @@
                     migratePacks(dbConfig.bulkPacks);
 
                     window.siteConfig = dbConfig;
+                    window.siteConfig.paymentMode = "razorpay";
                     
                     if(typeof window.applyUISettings === 'function') window.applyUISettings();
                     if(typeof window.renderSitePacks === 'function') window.renderSitePacks();
                     if(typeof window.renderAdminPacksList === 'function') window.renderAdminPacksList();
-                    if(typeof window.renderAdminUpiList === 'function') window.renderAdminUpiList();
                     if(typeof window.renderAdminRzpLinksList === 'function') window.renderAdminRzpLinksList();
                     if(typeof window.injectDynamicStatusUI === 'function') window.injectDynamicStatusUI(); 
                     
@@ -1539,10 +1462,9 @@
     // --- ADMIN SYSTEM VARIABLES ---
     const defaultAdminConfig = {
         adminAuth: { u: "c3lub3g=", p: "bW9vbnRhZ2U=" },
-        paymentMode: "upi", 
+        paymentMode: "razorpay", 
         razorpayLinks: [],
         razorpayApiUrl: "", 
-        upiIds: [], 
         shopTiming: { startHour: 0, endHour: 9 },
         texts: {
             tagline: "BGMI UC • Lightning-fast delivery",
@@ -1553,14 +1475,13 @@
             step1Title: "Player Details",
             step2Title: "Select BGMI UC Packs",
             step3Title: "Payment",
-            step3Subnote: "Scan & pay using any UPI app",
+            step3Subnote: "Complete your transaction securely",
             totalPayable: "TOTAL PAYABLE (EXACT)",
             warnTitle: "Limit Warning:",
             warnDesc: "Personal UPI limits often fail for amounts over ₹2000.",
             awaitingTitle: "Awaiting Payment...",
             awaitingDesc1: "Please pay exactly",
             awaitingDesc2: "Our system will detect your payment automatically.",
-            upiBanner: "Scan & Pay From Any UPI App",
             cancelBtn: "Go Back",
             maintenance: "Payment System Under Maintenance",
             nightModeTitle: "Night Mode Active",
@@ -1579,16 +1500,16 @@
             showTagline: true, showSecureBadge: true, showInstantBadge: true, showSupportBadge: true, showOrdersToday: true,
             showStep1Title: true, showStep2Title: true, showStep3Title: true,
             showStep3Subnote: true, showTotalPayable: true, showWarnBanner: true, showAwaitingStatus: true,
-            showUpiBannerText: true, showCancelBtn: true, showSuccessTitle: true, showReceipt: true,
-            showPartnerLogo: true, showSocialProof: true, showUpiApps: true, showFooterKrafton: true,
+            showCancelBtn: true, showSuccessTitle: true, showReceipt: true,
+            showPartnerLogo: true, showSocialProof: true, showFooterKrafton: true,
             enableNightMode: true 
         },
         policies: {
-            showTerms: true, contentTerms: "<h4>1. Introduction</h4><p>By using this website, you agree to these Terms and Conditions. This platform provides digital top-up services for BGMI UC.</p><h4>2. Services Provided</h4><p>We facilitate the transfer of digital in-game currency (UC) to the provided Player UID. It is the user's responsibility to enter the correct UID.</p><h4>3. Payment</h4><p>All transactions are processed securely via our automated payment methods. We do not store your credit card or banking details.</p><h4>4. User Responsibilities</h4><p>You must ensure the accuracy of the Player ID (UID) provided. Transactions processed to incorrect UIDs due to user error cannot be reversed.</p>",
+            showTerms: true, contentTerms: "<p>BGMI UC purchased through UCify is delivered directly to the BGMI account associated with the User ID provided at the time of purchase. UCify is not responsible for incorrect User IDs entered by the buyer.</p><p>All purchases are final and non-refundable once UC has been credited to the recipient's BGMI account.</p><p>One-time offer packs are limited to a single purchase per BGMI User ID. Attempting to repurchase will not be processed.</p><p>UC delivery timelines are typically instant but may take up to 24 hours depending on server load and payment confirmation.</p><p>Pricing, bonus UC amounts, and offer availability are subject to change without prior notice and are determined by KRAFTON and UCify.</p><p>UC can only be used within BGMI for in-game purchases (Royale Pass, outfits, skins, crates, etc.) and holds no real-world monetary value. UC cannot be withdrawn, exchanged, or transferred outside the game.</p><p>UCify acts as an authorized distribution channel. All UC usage within BGMI is governed by KRAFTON's terms of service and BGMI's end-user license agreement.</p><p>For any disputes or delivery issues, contact Swag support within 7 days of purchase with your order ID and transaction details.</p><p>By completing a purchase, you confirm that you agree to these terms and UCify's general terms of service.</p>",
             showPrivacy: true, contentPrivacy: "<h4>1. Information We Collect</h4><p>We collect your BGMI Player ID (UID) and In-Game Name (IGN) solely for the purpose of delivering the digital product. We process payments securely and do not store financial data.</p><h4>2. How We Use Your Data</h4><p>Your data is used strictly for order fulfillment, customer support, and transaction verification.</p><h4>3. Data Sharing</h4><p>We do not sell, trade, or rent user data to third parties. Information is only shared with our payment provider as required to process your transaction.</p>",
             showRefund: true, contentRefund: "<h4>1. Digital Goods Policy</h4><p>Because the products we sell are strictly digital in-game currency, <strong>all sales are final</strong>. Once the UC is successfully transferred to the provided UID, no refunds or cancellations can be processed.</p><h4>2. Failed Transactions</h4><p>If your payment is deducted but the order fails on our end, a full refund will be automatically initiated to your original payment method within 5-7 business days.</p><h4>3. Incorrect UID</h4><p>We are not responsible for UC sent to an incorrect UID provided by the user. No refunds will be issued in such cases.</p>",
             showShipping: true, contentShipping: "<h4>1. Delivery Method</h4><p>All deliveries are purely digital. No physical product will be shipped to your address.</p><h4>2. Delivery Time</h4><p>UC is typically credited to your account instantly or within 10-15 minutes. In case of server delays, please allow up to 24 hours for the transaction to reflect in your BGMI account.</p>",
-            showContact: true, contentContact: "<h4>Get in Touch</h4><p>If you face any issues with your order, please contact our support team. Have your Order ID and Transaction ID ready.</p><ul><li><strong>Business Name:</strong> Krafton Inc</li><li><strong>Email Support:</strong> ucify.support@gmail.com</li><li><strong>Operating Hours:</strong> Mon - Sat, 10:00 AM to 7:00 PM</li></ul>"
+            showContact: true, contentContact: "<h4>Get in Touch</h4><p>If you face any issues with your order, please contact our support team. Have your Order ID and Transaction ID ready.</p><ul><li><strong>Business Name:</strong> UCIFY (INDIA) PRIVATE LIMITED</li><li><strong>Email Support:</strong> ucify.support@gmail.com</li><li><strong>Registered Address:</strong> HD-445, WeWork DLF Two Horizon Centre, 5th Floor, DLF Phase 5, Sector 43, Golf Course Road, Gurugram, Haryana 122002</li><li><strong>Business Address:</strong> 04A131, WeWork DLF Two Horizon Centre, 4th Floor, DLF Phase 5, Sector 43, Golf Course Road, Gurugram, Haryana 122002</li></ul>"
         },
         trialPacks: [ { uc: 13, price: 5, rzpLinks: [] } ],
         bulkPacks: [
@@ -1600,18 +1521,13 @@
     };
 
     window.siteConfig = JSON.parse(localStorage.getItem('ucifyAdminConfig')) || defaultAdminConfig;
+    window.siteConfig.paymentMode = "razorpay";
     
     // Auto-migrate "Orders Today" to "Packs Delivered Today" if they had the old default saved
     if (window.siteConfig.texts && (window.siteConfig.texts.ordersToday === "Orders Today" || window.siteConfig.texts.ordersToday === "Packs Delivered")) {
         window.siteConfig.texts.ordersToday = "Packs Delivered Today";
     }
 
-    if(window.siteConfig.upiId && !window.siteConfig.upiIds) {
-        window.siteConfig.upiIds = [{ id: window.siteConfig.upiId, active: true }];
-        delete window.siteConfig.upiId;
-    }
-    if(!window.siteConfig.paymentMode) window.siteConfig.paymentMode = "upi";
-    
     if(window.siteConfig.razorpayLinks === undefined) window.siteConfig.razorpayLinks = [];
     if(window.siteConfig.razorpayLink && window.siteConfig.razorpayLinks.length === 0) {
         window.siteConfig.razorpayLinks = window.siteConfig.razorpayLink.split(',').map(l => l.trim()).filter(l => l);
@@ -1675,7 +1591,6 @@
         document.getElementById('dispTotalPayable').textContent = getText('totalPayable');
         document.getElementById('dispWarnTitle').textContent = getText('warnTitle');
         document.getElementById('dispWarnDesc').textContent = getText('warnDesc');
-        document.getElementById('dispUpiBanner').textContent = getText('upiBanner');
         document.getElementById('dispCancelBtn').textContent = getText('cancelBtn');
         document.getElementById('dispMaintenanceText').textContent = getText('maintenance');
         
@@ -1696,7 +1611,7 @@
         document.getElementById('pillSecure').style.display = getTgl('showSecureBadge') ? 'flex' : 'none';
         document.getElementById('pillInstant').style.display = getTgl('showInstantBadge') ? 'flex' : 'none';
         document.getElementById('pillSupport').style.display = getTgl('showSupportBadge') ? 'flex' : 'none';
-        document.getElementById('pillStats').style.display = getTgl('showOrdersToday') ? 'flex' : 'none'; // Changed to flex for icon align
+        document.getElementById('pillStats').style.display = getTgl('showOrdersToday') ? 'flex' : 'none'; 
         
         document.getElementById('dispStep1Title').style.display = getTgl('showStep1Title') ? 'block' : 'none';
         document.getElementById('dispStep2Title').style.display = getTgl('showStep2Title') ? 'block' : 'none';
@@ -1706,16 +1621,12 @@
         document.getElementById('dispTotalPayable').style.display = getTgl('showTotalPayable') ? 'block' : 'none';
         document.getElementById('highValueWarning').style.display = getTgl('showWarnBanner') ? (parseInt(selectedPack?.price || 0) > 2000 ? 'block' : 'none') : 'none';
         document.getElementById('verificationStatus').style.display = getTgl('showAwaitingStatus') ? 'block' : 'none';
-        document.getElementById('dispUpiBanner').style.display = getTgl('showUpiBannerText') ? 'block' : 'none';
         document.getElementById('dispCancelBtnWrap').style.display = getTgl('showCancelBtn') ? 'flex' : 'none';
         
         document.getElementById('dispSuccessTitle').style.display = getTgl('showSuccessTitle') ? 'block' : 'none';
         document.getElementById('dispReceiptBox').style.display = getTgl('showReceipt') ? 'block' : 'none';
 
         document.getElementById('partnerBlock').style.display = getTgl('showPartnerLogo') ? 'block' : 'none';
-        
-        const mode = window.siteConfig?.paymentMode || 'upi';
-        document.getElementById('dispUpiAppsBanner').style.display = (getTgl('showUpiApps') && mode === 'upi') ? 'block' : 'none';
         
         document.getElementById('footerKrafton').style.display = getTgl('showFooterKrafton') ? 'block' : 'none';
         allowSocialProofPopup = getTgl('showSocialProof');
@@ -1737,15 +1648,8 @@
         const vStatus = document.getElementById('verificationStatus');
         if(!vStatus || vStatus.style.background === "rgba(0, 255, 157, 0.1)") return; 
         
-        const mode = window.siteConfig?.paymentMode || 'upi';
-        let descHtml = '';
-        if (mode === 'upi') {
-            descHtml = `${getText('awaitingDesc1')} <strong id="exactAmountText" style="color: var(--primary);">₹${exactPriceStr}</strong>.<br>
+        let descHtml = `Please complete your payment securely.<br>
             ${getText('awaitingDesc2')}`;
-        } else {
-            descHtml = `Please complete your payment securely.<br>
-            ${getText('awaitingDesc2')}`;
-        }
 
         vStatus.style.background = "rgba(0, 224, 255, 0.05)";
         vStatus.style.borderColor = "rgba(0, 224, 255, 0.2)";
@@ -1811,7 +1715,6 @@
     function openAdminPanel() {
         const validU = window.siteConfig.adminAuth?.u || defaultAdminConfig.adminAuth.u;
         document.getElementById('adminSetUser').placeholder = "Current: " + atob(validU); document.getElementById('adminSetUser').value = ""; document.getElementById('adminSetPass').value = "";
-        document.getElementById('adminPaymentMode').value = window.siteConfig.paymentMode || 'upi';
         
         document.getElementById('adminRazorpayApi').value = window.siteConfig.razorpayApiUrl || '';
         document.getElementById('adminNightStart').value = window.siteConfig.shopTiming.startHour !== undefined ? window.siteConfig.shopTiming.startHour : 0;
@@ -1823,7 +1726,7 @@
         document.getElementById('adminTextStep3Subnote').value = getText('step3Subnote'); document.getElementById('adminTextTotalPay').value = getText('totalPayable');
         document.getElementById('adminTextWarnTitle').value = getText('warnTitle'); document.getElementById('adminTextWarnDesc').value = getText('warnDesc');
         document.getElementById('adminTextAwaitTitle').value = getText('awaitingTitle'); document.getElementById('adminTextAwaitDesc1').value = getText('awaitingDesc1');
-        document.getElementById('adminTextAwaitDesc2').value = getText('awaitingDesc2'); document.getElementById('adminTextUpiBanner').value = getText('upiBanner');
+        document.getElementById('adminTextAwaitDesc2').value = getText('awaitingDesc2');
         document.getElementById('adminTextCancelBtn').value = getText('cancelBtn'); document.getElementById('adminTextMaintenance').value = getText('maintenance');
         document.getElementById('adminTextNightTitle').value = getText('nightModeTitle'); document.getElementById('adminTextNightDesc').value = getText('nightModeDesc');
         document.getElementById('adminTextSuccessTitle').value = getText('successTitle'); document.getElementById('adminTextFinalMsg').value = getText('finalSuccessMsg');
@@ -1838,10 +1741,10 @@
         document.getElementById('tgl_step2Title').checked = getTgl('showStep2Title'); document.getElementById('tgl_step3Title').checked = getTgl('showStep3Title');
         document.getElementById('tgl_step3Subnote').checked = getTgl('showStep3Subnote'); document.getElementById('tgl_totalPayable').checked = getTgl('showTotalPayable');
         document.getElementById('tgl_warnBanner').checked = getTgl('showWarnBanner'); document.getElementById('tgl_awaitingStatus').checked = getTgl('showAwaitingStatus');
-        document.getElementById('tgl_upiBannerText').checked = getTgl('showUpiBannerText'); document.getElementById('tgl_cancelBtn').checked = getTgl('showCancelBtn');
+        document.getElementById('tgl_cancelBtn').checked = getTgl('showCancelBtn');
         document.getElementById('tgl_successTitle').checked = getTgl('showSuccessTitle'); document.getElementById('tgl_showReceipt').checked = getTgl('showReceipt');
         document.getElementById('tgl_enableNightMode').checked = getTgl('enableNightMode'); document.getElementById('adminShowLogo').checked = getTgl('showPartnerLogo');
-        document.getElementById('adminShowProof').checked = getTgl('showSocialProof'); document.getElementById('adminShowUpiIcons').checked = getTgl('showUpiApps');
+        document.getElementById('adminShowProof').checked = getTgl('showSocialProof'); 
         document.getElementById('adminShowKrafton').checked = getTgl('showFooterKrafton');
 
         document.getElementById('adminShowTerms').checked = window.siteConfig.policies.showTerms; document.getElementById('adminShowPrivacy').checked = window.siteConfig.policies.showPrivacy;
@@ -1853,33 +1756,7 @@
         document.getElementById('adminContentShipping').value = window.siteConfig.policies.contentShipping || defaultAdminConfig.policies.contentShipping;
         document.getElementById('adminContentContact').value = window.siteConfig.policies.contentContact || defaultAdminConfig.policies.contentContact;
         
-        window.renderAdminUpiList(); window.renderAdminRzpLinksList(); window.renderAdminPacksList(); window.openModal('adminPanelModal');
-    }
-
-    // --- UPI List Render ---
-    window.renderAdminUpiList = function() {
-        if(!document.getElementById('adminUpiList')) return;
-        const upis = window.siteConfig.upiIds || [];
-        const renderList = upis.map((u, index) => `
-            <div class="admin-input-group" style="justify-content: space-between; background: rgba(0, 224, 255, 0.05); border: 1px solid rgba(0, 224, 255, 0.1);">
-                <div style="display: flex; align-items: center; gap: 10px; flex: 1; overflow: hidden;">
-                    <input type="checkbox" ${u.active ? 'checked' : ''} onchange="toggleUpiActive(${index})" style="width: 18px; height: 18px; accent-color: var(--primary); cursor:pointer; flex-shrink: 0;" title="Tick to active for load balancing">
-                    <span style="font-size: 13px; color: ${u.active ? '#fff' : '#666'}; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; font-weight: ${u.active ? 'bold' : 'normal'};" title="${u.id}">${u.id}</span>
-                </div>
-                <button class="btn" style="background:var(--error); padding: 8px; width: 40px; flex-shrink: 0;" onclick="removeUpi(${index})"><i class="fas fa-trash"></i></button>
-            </div>
-        `).join('');
-        
-        if(upis.length === 0) { document.getElementById('adminUpiList').innerHTML = `<div style="text-align:center; padding: 10px; color: var(--error); font-size: 12px; margin-bottom: 10px; border: 1px dashed var(--error); border-radius: var(--radius-sm);">No UPI IDs added. Maintenance mode is ON (If UPI is selected).</div>`;
-        } else { document.getElementById('adminUpiList').innerHTML = renderList; }
-    }
-
-    window.toggleUpiActive = function(index) { if(window.siteConfig.upiIds[index]) { window.siteConfig.upiIds[index].active = !window.siteConfig.upiIds[index].active; window.renderAdminUpiList(); } }
-    window.removeUpi = function(index) { window.siteConfig.upiIds.splice(index, 1); window.renderAdminUpiList(); }
-    window.addNewUpi = function() {
-        const val = document.getElementById('newUpiId').value.trim();
-        if(val) { if(!window.siteConfig.upiIds) window.siteConfig.upiIds = []; window.siteConfig.upiIds.push({id: val, active: true}); document.getElementById('newUpiId').value = ''; window.renderAdminUpiList();
-        } else { alert("Please enter a valid UPI ID"); }
+        window.renderAdminRzpLinksList(); window.renderAdminPacksList(); window.openModal('adminPanelModal');
     }
 
     // --- Razorpay Global Links List Render ---
@@ -1914,7 +1791,6 @@
             alert("Please enter a valid Razorpay link"); 
         }
     }
-
 
     // --- Admin Packs Render with specific Razorpay Links UI ---
     window.renderAdminPacksList = function() {
@@ -2000,7 +1876,7 @@
         const newU = document.getElementById('adminSetUser').value.trim(); const newP = document.getElementById('adminSetPass').value.trim();
         if(newU && newP) { window.siteConfig.adminAuth = { u: btoa(newU), p: btoa(newP) }; }
         
-        window.siteConfig.paymentMode = document.getElementById('adminPaymentMode').value;
+        window.siteConfig.paymentMode = "razorpay";
         window.siteConfig.razorpayApiUrl = document.getElementById('adminRazorpayApi').value.trim();
         window.siteConfig.shopTiming.startHour = parseInt(document.getElementById('adminNightStart').value) || 0;
         window.siteConfig.shopTiming.endHour = parseInt(document.getElementById('adminNightEnd').value) || 9;
@@ -2020,7 +1896,6 @@
         window.siteConfig.texts.awaitingTitle = document.getElementById('adminTextAwaitTitle').value.trim() || defaultAdminConfig.texts.awaitingTitle;
         window.siteConfig.texts.awaitingDesc1 = document.getElementById('adminTextAwaitDesc1').value.trim() || defaultAdminConfig.texts.awaitingDesc1;
         window.siteConfig.texts.awaitingDesc2 = document.getElementById('adminTextAwaitDesc2').value.trim() || defaultAdminConfig.texts.awaitingDesc2;
-        window.siteConfig.texts.upiBanner = document.getElementById('adminTextUpiBanner').value.trim() || defaultAdminConfig.texts.upiBanner;
         window.siteConfig.texts.cancelBtn = document.getElementById('adminTextCancelBtn').value.trim() || defaultAdminConfig.texts.cancelBtn;
         window.siteConfig.texts.maintenance = document.getElementById('adminTextMaintenance').value.trim() || defaultAdminConfig.texts.maintenance;
         window.siteConfig.texts.nightModeTitle = document.getElementById('adminTextNightTitle').value.trim() || defaultAdminConfig.texts.nightModeTitle;
@@ -2047,14 +1922,12 @@
         window.siteConfig.toggles.showTotalPayable = document.getElementById('tgl_totalPayable').checked;
         window.siteConfig.toggles.showWarnBanner = document.getElementById('tgl_warnBanner').checked;
         window.siteConfig.toggles.showAwaitingStatus = document.getElementById('tgl_awaitingStatus').checked;
-        window.siteConfig.toggles.showUpiBannerText = document.getElementById('tgl_upiBannerText').checked;
         window.siteConfig.toggles.showCancelBtn = document.getElementById('tgl_cancelBtn').checked;
         window.siteConfig.toggles.showSuccessTitle = document.getElementById('tgl_successTitle').checked;
         window.siteConfig.toggles.showReceipt = document.getElementById('tgl_showReceipt').checked;
         window.siteConfig.toggles.enableNightMode = document.getElementById('tgl_enableNightMode').checked;
         window.siteConfig.toggles.showPartnerLogo = document.getElementById('adminShowLogo').checked;
         window.siteConfig.toggles.showSocialProof = document.getElementById('adminShowProof').checked;
-        window.siteConfig.toggles.showUpiApps = document.getElementById('adminShowUpiIcons').checked;
         window.siteConfig.toggles.showFooterKrafton = document.getElementById('adminShowKrafton').checked;
         
         window.siteConfig.policies.showTerms = document.getElementById('adminShowTerms').checked;
@@ -2176,10 +2049,10 @@
     }
     animateLiveOrders();
 
-    function startQRTimer(mode = 'upi'){
+    function startQRTimer(mode = 'razorpay'){
       const display = document.getElementById('timerDisplay');
       const timerEl = document.getElementById('qrTimer');
-      if (mode === 'upi') timerEl.style.display = 'block'; 
+      timerEl.style.display = 'block'; 
 
       if(qrTimer) clearInterval(qrTimer);
       timerSeconds = 120; // 2 minutes auto redirect
@@ -2188,11 +2061,11 @@
         timerSeconds--;
         const mins = Math.floor(timerSeconds / 60); const secs = timerSeconds % 60;
         
-        if (mode === 'upi') display.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        display.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
         
         if(timerSeconds <= 0){
             clearInterval(qrTimer);
-            if(mode === 'upi') display.textContent = 'Expired';
+            display.textContent = 'Expired';
             if(paymentVerificationInterval) clearInterval(paymentVerificationInterval);
             
             // Programmatically go back without toast message
@@ -2324,51 +2197,36 @@
 
     // --- SMART PAYMENT PROCESSING ---
     document.getElementById('next2').onclick = async function() {
-      const mode = window.siteConfig.paymentMode || 'upi';
+      const mode = 'razorpay'; // Hardcoded to Razorpay
       const btn = document.getElementById('next2');
       const origText = btn.innerHTML;
 
-      if (mode === 'upi') {
-          let activeUpis = window.siteConfig.upiIds ? window.siteConfig.upiIds.filter(u => u.active) : [];
-          if (activeUpis.length === 0) {
-              document.getElementById('normalPaymentUI').style.display = 'none'; document.getElementById('maintenanceUI').style.display = 'block'; showStep(3); return; 
-          }
-      } 
-      
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
       btn.disabled = true;
 
       let exactPrice = parseFloat(selectedPack.price);
       let rzpTargetLink = "";
 
-      if (mode === 'upi') {
-          const randomDecimal = (Math.floor(Math.random() * 99) + 1) / 100; exactPrice += randomDecimal;
-          exactPriceStr = exactPrice.toFixed(2);
-      } else if (mode === 'razorpay') {
-          let rzpGlobalLinks = window.siteConfig.razorpayLinks || [];
-          let packSpecificLinks = selectedPack.rzpLinks || [];
-          
-          if (packSpecificLinks.length > 0) { 
-              // Pick random from pack specific links
-              rzpTargetLink = packSpecificLinks[Math.floor(Math.random() * packSpecificLinks.length)];
-          } else if (rzpGlobalLinks.length > 0) { 
-              // Fallback to random global link
-              rzpTargetLink = rzpGlobalLinks[Math.floor(Math.random() * rzpGlobalLinks.length)];
-          }
-          
-          exactPriceStr = exactPrice.toString();
+      let rzpGlobalLinks = window.siteConfig.razorpayLinks || [];
+      let packSpecificLinks = selectedPack.rzpLinks || [];
+      
+      if (packSpecificLinks.length > 0) { 
+          // Pick random from pack specific links
+          rzpTargetLink = packSpecificLinks[Math.floor(Math.random() * packSpecificLinks.length)];
+      } else if (rzpGlobalLinks.length > 0) { 
+          // Fallback to random global link
+          rzpTargetLink = rzpGlobalLinks[Math.floor(Math.random() * rzpGlobalLinks.length)];
       }
       
+      exactPriceStr = exactPrice.toString();
       orderId = generateOrderId();
       
       // FIREBASE SMART LOCKING FOR RAZORPAY
-      if (mode === 'razorpay') {
-          if(typeof window.acquireLock === 'function') {
-              const lockAcquired = await window.acquireLock(exactPriceStr, orderId);
-              if(!lockAcquired) {
-                  btn.innerHTML = origText; btn.disabled = false;
-                  showLockUI(); return; // Stop process here
-              }
+      if(typeof window.acquireLock === 'function') {
+          const lockAcquired = await window.acquireLock(exactPriceStr, orderId);
+          if(!lockAcquired) {
+              btn.innerHTML = origText; btn.disabled = false;
+              showLockUI(); return; // Stop process here
           }
       }
       
@@ -2384,38 +2242,18 @@
       if (parseInt(selectedPack.price) > 2000) { warningEl.style.display = getTgl('showWarnBanner') ? 'block' : 'none';
       } else { warningEl.style.display = 'none'; }
         
-      if (mode === 'upi') {
-          document.getElementById('razorpayCard').style.display = 'none'; document.getElementById('upiCard').style.display = 'block';
-          document.getElementById('dispUpiAppsBanner').style.display = getTgl('showUpiApps') ? 'block' : 'none';
-          document.getElementById('dispStep3Subnote').textContent = getText('step3Subnote');
+      document.getElementById('razorpayCard').style.display = 'block';
+      document.getElementById('dispStep3Subnote').textContent = "Complete your transaction securely";
 
-          const qrImage = document.getElementById('staticQrImage'); const loader = document.getElementById('qrLoader');
-          qrImage.style.display = 'none'; loader.style.display = 'block';
-
-          let activeUpis = window.siteConfig.upiIds.filter(u => u.active);
-          const randomUpi = activeUpis[Math.floor(Math.random() * activeUpis.length)].id;
-          const upiString = `upi://pay?pa=${randomUpi}&pn=UCify%20Store&am=${exactPriceStr}&cu=INR`;
-          const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiString)}&margin=10`;
-          
-          qrImage.src = qrUrl;
-          qrImage.onload = function(){ loader.style.display = 'none'; qrImage.style.display = 'block'; startQRTimer('upi'); startPaymentVerification(exactPriceStr, 'upi'); };
-          qrImage.onerror = function(){ loader.style.display = 'none'; console.log("Error loading QR code."); };
-      } 
-      else if (mode === 'razorpay') {
-          document.getElementById('upiCard').style.display = 'none'; document.getElementById('razorpayCard').style.display = 'block';
-          document.getElementById('dispUpiAppsBanner').style.display = 'none';
-          document.getElementById('dispStep3Subnote').textContent = "Complete your transaction securely";
-
-          document.getElementById('rzpExactAmountText').textContent = exactPriceStr;
-          
-          document.getElementById('rzpRedirectBtn').onclick = function() {
-              if (!rzpTargetLink) { alert("Error: Admin has not configured a Razorpay link for this pack or globally."); return; }
-              razorpayWindow = window.open(rzpTargetLink, '_blank');
-          };
-          
-          startQRTimer('razorpay');
-          startPaymentVerification(exactPriceStr, 'razorpay');
-      }
+      document.getElementById('rzpExactAmountText').textContent = exactPriceStr;
+      
+      document.getElementById('rzpRedirectBtn').onclick = function() {
+          if (!rzpTargetLink) { alert("Error: Admin has not configured a Razorpay link for this pack or globally."); return; }
+          razorpayWindow = window.open(rzpTargetLink, '_blank');
+      };
+      
+      startQRTimer('razorpay');
+      startPaymentVerification(exactPriceStr, 'razorpay');
 
       btn.innerHTML = origText; btn.disabled = false;
       showStep(3);
@@ -2425,17 +2263,15 @@
       if(qrTimer) clearInterval(qrTimer);
       if(paymentVerificationInterval) clearInterval(paymentVerificationInterval);
       
-      // Release lock if going back from Razorpay
-      const mode = window.siteConfig.paymentMode || 'upi';
-      if(mode === 'razorpay' && typeof window.releaseLock === 'function') { window.releaseLock(exactPriceStr); }
+      // Release lock if going back
+      if(typeof window.releaseLock === 'function') { window.releaseLock(exactPriceStr); }
       
       window.injectDynamicStatusUI(); showStep(2);
     };
 
-    function startPaymentVerification(amountToCheck, mode = 'upi') {
+    function startPaymentVerification(amountToCheck, mode = 'razorpay') {
         if(paymentVerificationInterval) clearInterval(paymentVerificationInterval);
-        let verificationApiUrl = HARDCODED_VERIFY_URL; 
-        if (mode === 'razorpay') { verificationApiUrl = window.siteConfig.razorpayApiUrl; }
+        let verificationApiUrl = window.siteConfig.razorpayApiUrl || HARDCODED_VERIFY_URL; 
         
         paymentVerificationInterval = setInterval(async () => {
             try {
@@ -2448,7 +2284,7 @@
                     if (razorpayWindow && !razorpayWindow.closed) { razorpayWindow.close(); }
                     
                     // Release lock on success
-                    if(mode === 'razorpay' && typeof window.releaseLock === 'function') { window.releaseLock(exactPriceStr); }
+                    if(typeof window.releaseLock === 'function') { window.releaseLock(exactPriceStr); }
                     
                     processSuccessfulPayment(mode);
                 }
@@ -2469,7 +2305,7 @@
         setTimeout(async () => {
             const time = new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' });
             const messageContent = `✅ **AUTO-VERIFIED ORDER** ✅\n\n` +
-                                   `**Method:** ${mode === 'razorpay' ? 'Razorpay' : 'UPI QR'}\n` +
+                                   `**Method:** Razorpay\n` +
                                    `**Order ID:** \`${orderId}\`\n` +
                                    `**UID:** \`${currentUid}\`\n` +
                                    `**IGN:** ${currentIgn}\n` +
